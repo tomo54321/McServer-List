@@ -1,0 +1,47 @@
+.server-ip-container {
+  max-width: 468px;
+  margin: auto;
+}
+
+.server-ip {
+  max-width: 468px;
+  background: #3490dc;
+  border-radius: 3px;
+  padding: 5px 10px;
+  color: #fff;
+}
+
+.server-ip p {
+  margin: 0;
+}
+
+.server-ip .btn {
+  background-color: rgba(0, 0, 0, 0.2);
+  color: #fff;
+}
+
+.server-ip .btn:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.server-view-header {
+  width: 100%;
+  display: block;
+  height: 150px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  background-size: cover;
+  background-position: center;
+}
+
+@media screen and (min-width: 768px) {
+  .server-ip {
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+  }
+
+  .server-view-header {
+    height: 200px;
+  }
+}
+
