@@ -11,7 +11,7 @@ class Tag extends Model
      * 
      * @var boolean
      */
-    protected $timestamps = false;
+    public $timestamps = false;
 
     /**
      * Fillable

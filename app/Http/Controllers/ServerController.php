@@ -2,10 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Tag;
 use Illuminate\Http\Request;
 
 class ServerController extends Controller
 {
+
+    /**
+     * New controller instance
+     */
+    public function __construct()
+    {
+        $this->middleware("auth")->except(["index", "show"]);
+    }
+
     /**
      * Display a listing of the resource.
      * (Route is disabled though as this is the homepage)
@@ -24,7 +34,7 @@ class ServerController extends Controller
      */
     public function create()
     {
-        //
+        return view("servers.create")->with(["tags"=>Tag::all()]);
     }
 
     /**

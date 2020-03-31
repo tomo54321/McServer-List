@@ -58,15 +58,7 @@
         <div class="d-none d-md-block col-6">
             <h2>Why Register?</h2>
             <p>Here's just a few reasons to join {{env("APP_NAME", "Laravel")}}:</p>
-            <ul>
-                <li>Free server advertising</li>
-                <li>Votifier support</li>
-                <li>Uptime monitoring</li>
-                <li>Sharable page</li>
-                <li>In depth analytics (IP Copies, players &amp; more...)</li>
-                <li>Boostable server listing</li>
-                <li>Listings for both Java and Bedrock Editions</li>
-            </ul>
+            @include("includes.reasons")
         </div>
     </div>
 </div>

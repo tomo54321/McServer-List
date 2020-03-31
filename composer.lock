@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9275d1365fb17bb191e2895309809400",
+    "content-hash": "8de5640b041210b708632f5a3f6635de",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -168,6 +168,62 @@
                 "math"
             ],
             "time": "2020-02-17T13:57:43+00:00"
+        },
+        {
+            "name": "d3strukt0r/votifier-client",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/D3strukt0r/votifier-client-php.git",
+                "reference": "a69d6ca47915ea87d55e81ecdbd9140e0a37aa5d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/D3strukt0r/votifier-client-php/zipball/a69d6ca47915ea87d55e81ecdbd9140e0a37aa5d",
+                "reference": "a69d6ca47915ea87d55e81ecdbd9140e0a37aa5d",
+                "shasum": ""
+            },
+            "require": {
+                "ext-date": "*",
+                "ext-hash": "*",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "ext-openssl": "*",
+                "ext-pcre": "*",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "php-coveralls/php-coveralls": "^2",
+                "phpunit/phpunit": "^9 || ^8 || ^7",
+                "scrutinizer/ocular": "^1",
+                "squizlabs/php_codesniffer": "^3.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "D3strukt0r\\VotifierClient\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Manuele Vaccari",
+                    "email": "manuele.vaccari@gmail.com",
+                    "homepage": "https://github.com/D3strukt0r",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Simple Tool to send vote request to a server which has the Votifier plugin.",
+            "homepage": "https://github.com/D3strukt0r/votifier-client-php",
+            "keywords": [
+                "minecraft",
+                "vote",
+                "votifier"
+            ],
+            "time": "2020-03-08T23:11:54+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -3625,6 +3681,39 @@
                 "php"
             ],
             "time": "2020-03-13T01:23:26+00:00"
+        },
+        {
+            "name": "xpaw/php-minecraft-query",
+            "version": "4.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xPaw/PHP-Minecraft-Query.git",
+                "reference": "92103ddcc61b10533ed07e3ce73d04634fa76dcd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xPaw/PHP-Minecraft-Query/zipball/92103ddcc61b10533ed07e3ce73d04634fa76dcd",
+                "reference": "92103ddcc61b10533ed07e3ce73d04634fa76dcd",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "xPaw\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "PHP library to query Minecraft servers",
+            "keywords": [
+                "minecraft"
+            ],
+            "time": "2019-12-24T10:02:17+00:00"
         }
     ],
     "packages-dev": [

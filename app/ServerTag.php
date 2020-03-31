@@ -11,7 +11,7 @@ class ServerTag extends Model
      * 
      * @var boolean
      */
-    protected $timestamps = false;
+    public $timestamps = false;
 
     /**
      * Attributes that are mass assignable

@@ -1,4 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.app',[
+    "pagename"=>"Hypixel"
+])
 
 @section('content')
 <div class="container">
