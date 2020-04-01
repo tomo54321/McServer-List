@@ -6,7 +6,7 @@
 <div class="container">
     <h1>Add Server</h1>
     <p>Fields marked with a <span class="text-danger">*</span> are required.</p>
-    <form action="{{route('server.store')}}" method="POST">
+    <form action="{{route('server.store')}}" method="POST" id="create-server-form" enctype="multipart/form-data">
         @csrf
         <div class="form-group">
             <label for="name">Server Name<span class="text-danger">*</span></label>
@@ -52,7 +52,7 @@
                 <label class="custom-file-label" for="banner">Server Banner</label>
             </div>
             @error("banner")
-            <div class="invalid-feedback" role="alert">{{ $message }}</div>
+            <div class="invalid-feedback d-block" role="alert">{{ $message }}</div>
             @enderror
         </div>
 
@@ -63,7 +63,7 @@
                 <label class="custom-file-label" for="header">Server Heading Image</label>
             </div>
             @error("header")
-            <div class="invalid-feedback" role="alert">{{ $message }}</div>
+            <div class="invalid-feedback d-block" role="alert">{{ $message }}</div>
             @enderror
         </div>
 
@@ -97,7 +97,7 @@
 
         <div class="form-group">
             <label for="desc">Server Description<span class="text-danger">*</span></label>
-            <textarea id="desc" name="desc" class="form-control @error('desc')is-invalid @enderror"></textarea>
+            <textarea id="desc" name="desc" class="form-control @error('desc')is-invalid @enderror">{{old("desc")}}</textarea>
             @error("desc")
             <div class="invalid-feedback" role="alert">{{ $message }}</div>
             @enderror
@@ -114,7 +114,7 @@
                     <div class="form-group">
                         <label for="vote_ip">Votifier IP</label>
                         <input type="text" name="vote_ip" id="vote_ip" class="form-control @error('vote_ip')is-invalid @enderror"
-                            placeholder="Votifier IP Address" value="{{old('vote_ip')}}" autocomplete="off" required />
+                            placeholder="Votifier IP Address" value="{{old('vote_ip')}}" autocomplete="off" />
                         @error("vote_ip")
                         <div class="invalid-feedback" role="alert">{{$message}}</div>
                         @enderror
@@ -124,7 +124,7 @@
                     <div class="form-group">
                         <label for="vote_port">Votifier Port</label>
                         <input type="number" name="vote_port" id="vote_port" class="form-control @error('vote_port')is-invalid @enderror"
-                            placeholder="Votifier Port" value="{{old('vote_port')}}" autocomplete="off" required />
+                            placeholder="Votifier Port" value="{{old('vote_port')}}" autocomplete="off" />
                         @error("vote_port")
                         <div class="invalid-feedback" role="alert">{{$message}}</div>
                         @enderror
@@ -148,11 +148,15 @@
         @foreach($tags as $tg)
             <div class="col-6">
                 <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="tag-{{$tg->id}}" name="tag-{{$tg->id}}">
+                    <input type="checkbox" class="custom-control-input server-tag-box" data-tag="{{$tg->id}}" id="tag-{{$tg->id}}">
                     <label class="custom-control-label" for="tag-{{$tg->id}}">{{$tg->name}}</label>
                 </div>
             </div>
         @endforeach
+
+        @error("tags")
+            <div class="invalid-feedback d-block">{{$message}}</div>
+        @enderror
         </div>
         
         <div class="form-group">
@@ -179,54 +183,86 @@
 
 @section("inline-script")
 <script>
-    $(document).ready(function(){
-        $("#votifier").on("change", function(){
-            if($(this).is(":checked")){
-                $("#votifier_support").slideDown("fast");
-            }else{
-                $("#votifier_support").slideUp("fast");
+$(document).ready(function () {
+
+    $('#banner, #header').on('change',function(){
+        var fileName = $(this).val();
+        $(this).next('.custom-file-label').text(fileName);
+    });
+
+    $("#votifier").on("change", function () {
+        if ($(this).is(":checked")) {
+            $("#votifier_support").slideDown("fast");
+        } else {
+            $("#votifier_support").slideUp("fast");
+        }
+    });
+
+    $("#ip, #port").on("change", function () {
+        $("#server-verify.form-group button").text("Verify Server").prop("disabled", false);
+    });
+
+    $(".server-tag-box").on("change", function (e) {
+        var tag = $(this).data("tag");
+        if (!isNaN(tag)) {
+            if ($(this).is(":checked")) {
+                
+                if($("input[name='tags[]']").length == 5){
+                    $(this).prop("checked", false);
+                    e.preventDefault();
+                    return;
+                }
+
+                if ($("input[data-tag-item='" + tag + "']").length < 1) {
+                    var tag_el = $("<input type='hidden' name='tags[]' />");
+                    tag_el.val(tag).attr("data-tag-item", tag);
+                    $("#create-server-form").append(tag_el);
+                }
+
+            } else {
+                if ($("input[data-tag-item='" + tag + "']").length >0) {
+                    $("input[data-tag-item='" + tag + "']").remove();
+                }
             }
-        });
+        }
 
-        $("#ip, #port").on("change", function(){
-            $("#server-verify.form-group button").text("Verify Server").prop("disabled", false);
-        });
+    });
 
-        $("#server-verify.form-group button").click(function(){
-            $("#ip").removeClass("is-invalid");
-            $("#ip").parent().children(".invalid-feedback").remove();
-            if($("#ip").val() == ""){
+    $("#server-verify.form-group button").click(function () {
+        $("#ip").removeClass("is-invalid");
+        $("#ip").parent().children(".invalid-feedback").remove();
+        if ($("#ip").val() == "") {
+            $("#ip").addClass("is-invalid");
+            $("#ip").parent().append("<div class='invalid-feedback' role='alert'>Please enter your server's ip.</div>");
+            return;
+        }
+
+        $(this).text("Pinging...").prop("disabled", true);
+        var btn = $(this);
+        var invalid_message = $("<div class='invalid-feedback' role='alert'></div>");
+
+        axios.get("/api/server/ping", {
+            params: {
+                ip: $("#ip").val(),
+                port: $("#port").val() ?? "25565"
+            }
+        }).then(function (res) {
+            if (res.data.success) {
+                $(btn).prop("disabled", true).text("Server is online");
+            } else {
+                invalid_message.text(res.data.message);
                 $("#ip").addClass("is-invalid");
-                $("#ip").parent().append("<div class='invalid-feedback' role='alert'>Please enter your server's ip.</div>");
-                return;
+                $("#ip").parent().append(invalid_message);
+                $(btn).text("Verify Server").prop("disabled", false);
             }
-
-            $(this).text("Pinging...").prop("disabled", true);
-            var btn = $(this);
-            var invalid_message = $("<div class='invalid-feedback' role='alert'></div>");
-
-            axios.get("/api/server/ping", {
-                params:{
-                    ip:$("#ip").val(),
-                    port:$("#port").val() ?? "25565"
-                }
-            }).then(function(res){
-                if(res.data.success){
-                    $(btn).prop("disabled", true).text("Server is online");
-                }else{
-                    invalid_message.text(res.data.message);
-                    $("#ip").addClass("is-invalid");
-                    $("#ip").parent().append(invalid_message);
-                    $(btn).text("Verify Server").prop("disabled", false);
-                }
-            })
-            .catch(function(error){
+        })
+            .catch(function (error) {
                 invalid_message.text(typeof error.response != "undefined" ? error.response.data.message : error.message);
                 $("#ip").addClass("is-invalid");
                 $("#ip").parent().append(invalid_message);
                 $(btn).text("Verify Server").prop("disabled", false);
             });
-        });
     });
+});
 </script>
 @endsection

@@ -26,18 +26,27 @@ class ServerTag extends Model
     /**
      * Server
      * 
-     * @return Illuminate\Database\Eloquent\Concerns\HasRelationships::belongsTo
+     * @return App\Server
      */
     public function server(){
         return $this->belongsTo("App\Server");
     }
-
+    
     /**
-     * Tag
+     * Actual Tag
      * 
-     * @return Illuminate\Database\Eloquent\Concerns\HasRelationships::belongsTo
+     * @return App\Tag
      */
     public function tag(){
         return $this->belongsTo("App\Tag");
+    }
+
+    /**
+     * Get the tags name
+     * 
+     * @return string
+     */
+    public function getNameAttribute(){
+        return $this->tag->name;
     }
 }

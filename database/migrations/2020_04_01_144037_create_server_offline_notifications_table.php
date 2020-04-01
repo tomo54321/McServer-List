@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateServerVotesTable extends Migration
+class CreateServerOfflineNotificationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,8 @@ class CreateServerVotesTable extends Migration
      */
     public function up()
     {
-        Schema::create('server_votes', function (Blueprint $table) {
+        Schema::create('server_offline_notifications', function (Blueprint $table) {
             $table->id();
-            $table->string("ip");
-            $table->string("username")->default(null);
-            $table->integer("user_id")->default(null);
             $table->integer("server_id");
             $table->timestamps();
         });
@@ -30,6 +27,6 @@ class CreateServerVotesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('server_votes');
+        Schema::dropIfExists('server_offline_notifications');
     }
 }

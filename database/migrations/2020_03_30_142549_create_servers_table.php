@@ -17,19 +17,27 @@ class CreateServersTable extends Migration
             $table->id();
             $table->integer("user_id");
             $table->string("name");
-            $table->string("banner_path")->default(null);
-            $table->string("header_path")->default(null);
-            $table->mediumText("description");
-            $table->string("youtube_id")->nullable();
-            $table->mediumText("votifier_key")->default(null);
-            $table->integer("votifier_port")->default(null);
             $table->string("ip");
             $table->integer("port");
 
-            $table->dateTime("featured_until")->default(null);
-            $table->dateTime("standing_out_until")->default(null);
+            $table->string("has_banner")->default(false);
+            $table->string("has_header")->default(false);
+            $table->string("has_icon")->default(false);
+            $table->mediumText("description");
 
-            $table->dateTime("last_pinged")->default(null);
+            $table->string("youtube_id")->nullable();
+            $table->mediumText("votifier_key")->nullable();
+            $table->integer("votifier_port")->nullable();
+
+            $table->dateTime("featured_until")->nullable();
+            $table->dateTime("standing_out_until")->nullable();
+
+            $table->integer("online_players")->nullable();
+            $table->integer("max_players")->nullable();
+            $table->string("version_string")->nullable();
+            $table->boolean("is_online")->default(false);
+            $table->dateTime("last_pinged")->nullable();
+
             $table->timestamps();
         });
     }

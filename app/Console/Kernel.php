@@ -25,6 +25,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+
+        //Update server ping cache
+        $schedule->command("servers:ping")->hourly();
     }
 
     /**

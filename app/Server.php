@@ -2,7 +2,12 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+
+
+use xPaw\MinecraftPing;
+use xPaw\MinecraftPingException;
 
 class Server extends Model
 {
@@ -14,26 +19,142 @@ class Server extends Model
     protected $fillable = [
         'user_id',
         'name',
-        'header_path',
-        'banner_path',
-        'description',
-        'youtube_id',
-        'votifier_key',
-        'votifier_port',
         'ip',
         'port',
+
+        'banner_path',
+        'header_path',
+        'icon_path',
+
+        'description',
+        'website',
+
+        'youtube_id',
+
+        'votifier_key',
+        'votifier_port',
+
         'featured_until',
         'standing_out_until',
+
+        'online_players',
+        'max_players',
+        'version_string',
+        'is_online',
         'last_pinged',
     ];
-    
-    
+
+    /**
+     * Cast attributes to native objects
+     * 
+     * @var array
+     */
+    protected $casts = [
+        "created_at" => "datetime",
+        "updated_at" => "datetime",
+        "last_pinged" => "datetime",
+        "offline_since" => "datetime"
+    ];
+
     /**
      * Tags
      * 
      * @return Illuminate\Support\Collection
      */
-    public function tags(){
-        return $this->hasManyThrough("App\Tag", "App\ServerTag");
+    public function tags()
+    {
+        return $this->hasMany(ServerTag::class);
+    }
+
+
+    /**
+     * Has Banner?
+     * 
+     * @return boolean
+     */
+    public function getHasBannerAttribute()
+    {
+        return !is_null($this->banner_path);
+    }
+
+    /**
+     * Has Banner?
+     * 
+     * @return boolean
+     */
+    public function getHasHeaderAttribute()
+    {
+        return !is_null($this->header_path);
+    }
+
+    /**
+     * Has Banner?
+     * 
+     * @return boolean
+     */
+    public function getHasIconAttribute()
+    {
+        return !is_null($this->icon_path);
+    }
+
+
+
+    /**
+     * Ping the server
+     * 
+     * @return void
+     */
+    public function ping()
+    {
+        //More than 5 minutes ago then ping server.
+        if ($this->last_pinged->addMinutes(5) < Carbon::now()) {
+
+            //Query to make sure it's online.
+            try {
+                $Query = new MinecraftPing($this->ip, $this->port);
+                $Query = $Query->Query();
+                $this->is_online = true;
+                $this->online_players = $Query["players"]["online"];
+                $this->max_players = $Query["players"]["max"];
+                $this->version_string = $Query["version"]["name"];
+                $this->last_pinged = new \DateTime();
+                $this->offline_since = null;
+                $this->save();
+
+
+                $ping = ServerPing::whereDate("created_at", new \DateTime())
+                    ->where("server_id", $this->id)->first();
+                if (is_null($ping)) {
+                    $ping = new ServerPing;
+                    $ping->server_id = $this->id;
+                    $ping->online_players = $Query["players"]["online"];
+                } else if ($ping->online_players < $Query["players"]["online"]) {
+                    $ping->online_players = $Query["players"]["online"];
+                }
+                $ping->save();
+            } catch (MinecraftPingException $ex) {
+                $this->is_online = false;
+                $this->online_players = null;
+                $this->max_players = null;
+                $this->version_string = null;
+                $this->last_pinged = new \DateTime();
+                if (is_null($this->offline_since)) {
+                    $this->offline_since = new \DateTime();
+                }
+                $this->save();
+
+                $ex_notification = ServerOfflineNotification::where("server_id", $this->id)
+                ->whereDate("created_at", new \DateTime())
+                ->count();
+                //No notifications already
+                if($ex_notification < 1){
+                    //Create Server Offline Notification
+                    ServerOfflineNotification::create([
+                        "server_id" => $this->id
+                    ]);
+                }
+                
+            }
+        }
     }
 }
