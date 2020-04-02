@@ -32,6 +32,7 @@ class Server extends Model
         'youtube_id',
 
         'votifier_key',
+        'votifier_ip',
         'votifier_port',
 
         'featured_until',
@@ -66,6 +67,15 @@ class Server extends Model
         return $this->hasMany(ServerTag::class);
     }
 
+    /**
+     * Owner
+     * 
+     * @return \App\Model\User
+     */
+    public function owner(){
+        return $this->belongsTo("App\User", "user_id");
+    }
+
 
     /**
      * Has Banner?
@@ -97,6 +107,24 @@ class Server extends Model
         return !is_null($this->icon_path);
     }
 
+    /**
+     * Enabled Votifier?
+     * 
+     * @return boolean
+     */
+    public function getEnabledVotifierAttribute(){
+        return !is_null($this->votifier_key) && !is_null($this->votifier_port) && !is_null($this->votifier_ip);
+    }
+
+    /**
+     * Get full IP (If server has default port don't show it)
+     * 
+     * @return string
+     */
+    public function getFullIpAttribute(){
+        return $this->ip.(($this->port==25565) ? "" : ":".$this->port);
+    }
+
 
 
     /**
@@ -106,8 +134,8 @@ class Server extends Model
      */
     public function ping()
     {
-        //More than 5 minutes ago then ping server.
-        if ($this->last_pinged->addMinutes(5) < Carbon::now()) {
+        //More than 10 minutes ago then ping server.
+        if ($this->last_pinged->addMinutes(7) < Carbon::now()) {
 
             //Query to make sure it's online.
             try {

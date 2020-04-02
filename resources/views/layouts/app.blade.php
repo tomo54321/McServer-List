@@ -39,9 +39,6 @@
                         <li class="nav-item">
                             <a href="{{route('home')}}" class="nav-link">Servers</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link">Bedrock</a>
-                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

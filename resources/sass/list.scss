@@ -20,6 +20,13 @@
     }
 }
 
+.ip-copy-btn{
+    cursor: pointer;
+    .badge{
+        user-select: none;
+    }
+}
+
 .server-view-header{
     width:100%;
     display:block;
@@ -30,6 +37,12 @@
     background-position: center;
 }
 
+.dropdown-menu-scrollable{
+    height: auto;
+    max-height: 100px;
+    overflow-x: hidden;
+}
+
 @media screen and (min-width: 768px){
     .server-ip{
         border-top-left-radius: 0px;
@@ -37,5 +50,8 @@
     }
     .server-view-header{
         height:200px;
+    }
+    .dropdown-menu-scrollable{
+        max-height: 200px;
     }
 }

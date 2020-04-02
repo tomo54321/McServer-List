@@ -30,7 +30,7 @@
             @if($server->website)
                 <a href="https://{{$server->website}}" rel="noopener" target="_blank" class="btn btn-primary mx-2">Website</a>
             @endif
-            <a href="" class="btn btn-success">Vote</a>
+            <a href="{{route("server.vote", ["server"=>$server->id])}}" class="btn btn-success">Vote</a>
         </div>
     </div>
 
@@ -77,7 +77,7 @@
                             <th>IP</th>
                             <td>
                                 <div class="d-flex">
-                                    <span class="flex-grow-1">{{$server->ip}}@if($server->port != 25565):{{$server->port}}@endif</span>
+                                    <span class="flex-grow-1">{{$server->full_ip}}</span>
                                     <button class="btn btn-dark btn-sm copy-ip-btn">Copy IP</button>
                                 </div>
                             </td>
@@ -110,6 +110,10 @@
                             <td>10</td>
                         </tr>
                         <tr>
+                            <th>Owner</th>
+                            <td>{{$server->owner->username}}
+                        </tr>
+                        <tr>
                             <th>Added</th>
                             <td>{{$server->created_at->format("d/m/Y \\a\\t h:ia")}}</td>
                         </tr>
@@ -137,7 +141,7 @@
 <script>
     $(document).ready(function(){
         $(".copy-ip-btn").click(function(){
-            var ip = "{{$server->ip}}@if($server->port != 25565):{{$server->port}}@endif";
+            var ip = "{{$server->full_ip}}";
             var $temp = $("<input>");
             $("body").append($temp);
             $temp.val(ip).select();
