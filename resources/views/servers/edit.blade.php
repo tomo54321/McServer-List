@@ -7,11 +7,21 @@
     <h1>Edit Server</h1>
 
     @if(\Session::has("success"))
-        <div class="alert alert-success"><strong>Success</strong> {{\Session::get("success")}}</div>
+    <div class="alert alert-success"><strong>Success</strong> {{\Session::get("success")}}</div>
     @endif
 
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{route('home')}}">Home</a></li>
+            <li class="breadcrumb-item" aria-current="page"><a
+                    href="{{route("server.show", ["server"=>$server->id])}}">{{$server->name}}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Edit</li>
+        </ol>
+    </nav>
+
     <p>Fields marked with a <span class="text-danger">*</span> are required.</p>
-    <form action="{{route('server.update', ["server"=>$server->id])}}" method="POST" id="create-server-form" enctype="multipart/form-data">
+    <form action="{{route('server.update', ["server"=>$server->id])}}" method="POST" id="create-server-form"
+        enctype="multipart/form-data">
         @csrf
         @method("put")
         <div class="form-group">
@@ -28,7 +38,8 @@
                 <div class="form-group">
                     <label for="ip">Server IP<span class="text-danger">*</span></label>
                     <input type="text" name="ip" id="ip" class="form-control @error('ip')is-invalid @enderror"
-                        placeholder="Server IP Address" value="{{old('ip') ?? $server->ip}}" autocomplete="off" required />
+                        placeholder="Server IP Address" value="{{old('ip') ?? $server->ip}}" autocomplete="off"
+                        required />
                     @error("ip")
                     <div class="invalid-feedback" role="alert">{{$message}}</div>
                     @enderror
@@ -38,7 +49,8 @@
                 <div class="form-group">
                     <label for="port">Port<span class="text-danger">*</span></label>
                     <input type="number" name="port" id="port" class="form-control @error('port')is-invalid @enderror"
-                        placeholder="Server IP Address" value="{{old('port')??$server->port}}" autocomplete="off" required />
+                        placeholder="Server IP Address" value="{{old('port')??$server->port}}" autocomplete="off"
+                        required />
                     @error("port")
                     <div class="invalid-feedback" role="alert">{{$message}}</div>
                     @enderror
@@ -54,11 +66,13 @@
         <div class="form-group">
             <label for="banner">Add your server banner</label>
             @if($server->has_banner)
-                <span class="text-muted d-block">Current Banner</span>
-                <img src="{{asset( "storage/".$server->user_id."/".$server->banner_path )}}" alt="{{$server->name}}" class="d-block mb-3"/>
+            <span class="text-muted d-block">Current Banner</span>
+            <img src="{{asset( "storage/".$server->user_id."/".$server->banner_path )}}" alt="{{$server->name}}"
+                class="d-block mb-3" />
             @endif
             <div class="custom-file">
-                <input type="file" class="custom-file-input" id="banner" accept="image/x-png,image/gif,image/jpeg" name="banner" />
+                <input type="file" class="custom-file-input" id="banner" accept="image/x-png,image/gif,image/jpeg"
+                    name="banner" />
                 <label class="custom-file-label" for="banner">Server Banner</label>
             </div>
             @error("banner")
@@ -69,11 +83,13 @@
         <div class="form-group">
             <label for="header">Upload a screenshot of your server</label>
             @if($server->has_header)
-                <span class="text-muted d-block">Current Header</span>
-                <img src="{{asset( "storage/".$server->user_id."/".$server->has_header )}}" alt="{{$server->name}}" class="d-block mb-3" height="100px"/>
+            <span class="text-muted d-block">Current Header</span>
+            <img src="{{asset( "storage/".$server->user_id."/".$server->has_header )}}" alt="{{$server->name}}"
+                class="d-block mb-3" height="100px" />
             @endif
             <div class="custom-file">
-                <input type="file" class="custom-file-input" id="header" accept="image/x-png,image/gif,image/jpeg" name="header" />
+                <input type="file" class="custom-file-input" id="header" accept="image/x-png,image/gif,image/jpeg"
+                    name="header" />
                 <label class="custom-file-label" for="header">Server Heading Image</label>
             </div>
             @error("header")
@@ -87,8 +103,9 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">https://youtube.com/watch?v=</span>
                 </div>
-                <input type="text" name="youtubeid" id="youtubeid" class="form-control @error('youtubeid')is-invalid @enderror"
-                    placeholder="Youtube Video ID" value="{{old('youtubeid') ?? $server->youtube_id}}" autocomplete="off" />
+                <input type="text" name="youtubeid" id="youtubeid"
+                    class="form-control @error('youtubeid')is-invalid @enderror" placeholder="Youtube Video ID"
+                    value="{{old('youtubeid') ?? $server->youtube_id}}" autocomplete="off" />
             </div>
             @error("youtubeid")
             <div class="invalid-feedback d-block" role="alert">{{ $message }}</div>
@@ -101,8 +118,9 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">https://</span>
                 </div>
-                <input type="text" name="website" id="website" class="form-control @error('website')is-invalid @enderror"
-                    placeholder="www.myserver.com" value="{{old('website') ?? $server->website}}" autocomplete="off" />
+                <input type="text" name="website" id="website"
+                    class="form-control @error('website')is-invalid @enderror" placeholder="www.myserver.com"
+                    value="{{old('website') ?? $server->website}}" autocomplete="off" />
             </div>
             @error("website")
             <div class="invalid-feedback d-block" role="alert">{{ $message }}</div>
@@ -111,24 +129,28 @@
 
         <div class="form-group">
             <label for="desc">Server Description<span class="text-danger">*</span></label>
-            <textarea id="desc" name="desc" class="form-control @error('desc')is-invalid @enderror">{{old("desc") ?? $server->description}}</textarea>
+            <textarea id="desc" name="desc"
+                class="form-control @error('desc')is-invalid @enderror">{{old("desc") ?? $server->description}}</textarea>
             @error("desc")
             <div class="invalid-feedback" role="alert">{{ $message }}</div>
             @enderror
         </div>
 
         <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" id="votifier" name="votifier">
+            <input type="checkbox" class="custom-control-input" id="votifier" name="votifier"
+                @if($server->enabled_votifier || !is_null(old("vote_ip")) || !is_null(old("vote_port"))) checked @endif>
             <label class="custom-control-label" for="votifier">Support Votifier?</label>
         </div>
-        <div id="votifier_support" class="jumbotron p-3 mt-3" style="display:none;">
+        <div id="votifier_support" class="jumbotron p-3 mt-3" @if(!$server->enabled_votifier && is_null(old("vote_ip"))
+            && is_null(old("vote_port"))) style="display:none;" @endif>
 
             <div class="row">
                 <div class="col-6">
                     <div class="form-group">
                         <label for="vote_ip">Votifier IP</label>
-                        <input type="text" name="vote_ip" id="vote_ip" class="form-control @error('vote_ip')is-invalid @enderror"
-                            placeholder="Votifier IP Address" value="{{old('vote_ip') ?? $server->votifier_ip}}" autocomplete="off" />
+                        <input type="text" name="vote_ip" id="vote_ip"
+                            class="form-control @error('vote_ip')is-invalid @enderror" placeholder="Votifier IP Address"
+                            value="{{old('vote_ip') ?? $server->votifier_ip}}" autocomplete="off" />
                         @error("vote_ip")
                         <div class="invalid-feedback" role="alert">{{$message}}</div>
                         @enderror
@@ -137,8 +159,9 @@
                 <div class="col-6">
                     <div class="form-group">
                         <label for="vote_port">Votifier Port</label>
-                        <input type="number" name="vote_port" id="vote_port" class="form-control @error('vote_port')is-invalid @enderror"
-                            placeholder="Votifier Port" value="{{old('vote_port') ?? $server->votifier_port}}" autocomplete="off" />
+                        <input type="number" name="vote_port" id="vote_port"
+                            class="form-control @error('vote_port')is-invalid @enderror" placeholder="Votifier Port"
+                            value="{{old('vote_port') ?? $server->votifier_port}}" autocomplete="off" />
                         @error("vote_port")
                         <div class="invalid-feedback" role="alert">{{$message}}</div>
                         @enderror
@@ -147,10 +170,12 @@
             </div>
 
             <div class="form-group">
-                <label for="votifier_key">Votifier Key</label>
-                <textarea class="form-control @error('votifier_key') is-invalid @enderror" style="resize: none;" name="votifier_key" id="votifier_key" placeholder="Please paste your votifier key here...">{{$server->votifier_key}}</textarea>
+                <label for="votifier_key">Votifier Public Key</label>
+                <textarea class="form-control @error('votifier_key') is-invalid @enderror" style="resize: none;"
+                    name="votifier_key" id="votifier_key"
+                    placeholder="You can find the key in /plugins/Votifier/rsa/public.key">{{$server->votifier_key}}</textarea>
                 @error("votifier_key")
-                    <div class="invalid-feedback" role="alert">{{$message}}</div>
+                <div class="invalid-feedback" role="alert">{{$message}}</div>
                 @enderror
             </div>
 
@@ -159,24 +184,25 @@
         <h5 class="mt-3">Add Tags<span class="text-danger">*</span></h5>
         <small class="d-block text-muted">Min 1 &amp; Max 5</small>
         <div class="row mb-4">
-        @foreach($tags as $tg)
+            @foreach($tags as $tg)
             <div class="col-6">
                 <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input server-tag-box" data-tag="{{$tg->id}}" id="tag-{{$tg->id}}" @if($server_tags->contains("tag_id", $tg->id)) checked @endif>
+                    <input type="checkbox" class="custom-control-input server-tag-box" data-tag="{{$tg->id}}"
+                        id="tag-{{$tg->id}}" @if($server_tags->contains("tag_id", $tg->id)) checked @endif>
                     <label class="custom-control-label" for="tag-{{$tg->id}}">{{$tg->name}}</label>
                 </div>
             </div>
-        @endforeach
+            @endforeach
 
-        @error("tags")
+            @error("tags")
             <div class="invalid-feedback d-block">{{$message}}</div>
-        @enderror
+            @enderror
         </div>
-        
+
         <div class="form-group">
             {!! ReCaptcha::htmlFormSnippet() !!}
             @error("g-recaptcha-response")
-                <div class="invalid-feedback d-block">{{$message}}</div>
+            <div class="invalid-feedback d-block">{{$message}}</div>
             @enderror
         </div>
 
@@ -184,9 +210,11 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-6">
-                    <span class="text-muted">By updating your server you agree all content submitted is owned by you or you have written permission to post</span>
+                    <span class="text-muted">By updating your server you agree all content submitted is owned by you or
+                        you have written permission to post</span>
                 </div>
                 <div class="col-6 text-right">
+                    <button type="button" class="btn btn-danger btn-remove-server">Delete server from {{config("app.name")}}</button>
                     <input type="submit" class="btn btn-success" value="Update Server" />
                 </div>
             </div>
@@ -197,11 +225,42 @@
         @endforeach
     </form>
 </div>
+
+<div class="modal fade" id="removeModal" tabindex="-1" role="dialog" aria-labelledby="removeModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="removeModal">Are you sure?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you would like to remove {{$server->name}} from {{config("app.name")}}? This will delete
+                any and all data we have including images, uptime tracking and players online information. All vote data
+                will also be lost. <b>This data cannot be recovered once you remove your server.</b>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Don't Remove</button>
+                <form action="{{route('server.destroy', ['server'=>$server->id])}}" method="POST">
+                    @csrf
+                    @method("delete")
+                    <button class="btn btn-danger">Remove server</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section("inline-script")
 <script>
-$(document).ready(function () {
+    $(document).ready(function () {
+
+    $(".btn-remove-server").click(function(e){
+        $("#removeModal").modal();
+        e.preventDefault();
+    });
 
     $('#banner, #header').on('change',function(){
         var fileName = $(this).val();

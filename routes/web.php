@@ -16,7 +16,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', "ServerController@index")->name("home");
 Route::resource("server", "ServerController")->except(["index"]);
 
-Route::get("/server/{server}/vote", "ServerController@vote")->name("server.vote");
-Route::post("/server/{server}/vote", "ServerController@cast")->name("server.cast");
+Route::get("/server/{server}/vote", "VoteController@vote")->name("server.vote");
+Route::post("/server/{server}/vote", "VoteController@cast")->name("server.cast");
+
+Route::get("/analytics/{server}", "AnalyticsController@basic")->name("analytics.basic");
 
 Auth::routes(["verify"=>true]);

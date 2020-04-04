@@ -17,6 +17,7 @@
         "laravel/framework": "^7.0",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.0",
+        "propaganistas/laravel-disposable-email": "^2.0",
         "xpaw/php-minecraft-query": "^4.0"
     },
     "require-dev": {

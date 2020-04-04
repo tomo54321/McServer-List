@@ -6,7 +6,9 @@ use App\Rules\ServerIP;
 use App\Server;
 use App\ServerPing;
 use App\ServerTag;
+use App\ServerVote;
 use App\Tag;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -22,7 +24,7 @@ class ServerController extends Controller
      */
     public function __construct()
     {
-        $this->middleware("auth")->except(["index", "show"]);
+        $this->middleware("auth")->except(["index", "show", "vote", "cast"]);
 
         //Only allow 2 requests every 1 minute to update a server.
         $this->middleware("throttle:2,1")->only(["update"]);
@@ -41,19 +43,18 @@ class ServerController extends Controller
             "category" => ["nullable", "exists:tags,id"],
             "sortby" => ["nullable", "in:votes,players,updated,added"]
         ]);
-        $servers = Server::where("is_online", true);
+        $servers = Server::withCount("votes")->where("is_online", true);
 
         //Category Filter
         if (!is_null($request->input("category"))) {
             $servers->where("category_id", $request->input("category"));
         }
         //Order By Filter
-        if (!is_null($request->input("sortby"))) {
-            $servers->orderBy(
-                $this->getColNameFromSort($request->input("sortby")),
-                "DESC"
-            );
-        }
+        $servers->orderBy(
+            $this->getColNameFromSort($request->input("sortby")),
+            "DESC"
+        );
+        
         //Query
         if (!is_null($request->input("query"))) {
             $servers->where("name", "like", "%{$request->input("query")}%");
@@ -199,7 +200,9 @@ class ServerController extends Controller
         $server->ping();
         return view("servers.show")->with([
             "server" => $server,
-            "path" => $server->user_id
+            "path" => $server->user_id,
+            "alltime_votes" => $server->votes()->count(),
+            "month_votes" => $server->votes()->whereBetween("created_at", [\Carbon\Carbon::now()->firstOfMonth(), \Carbon\Carbon::now()->endOfMonth()])->count()
         ]);
     }
 
@@ -315,6 +318,10 @@ class ServerController extends Controller
             "banner_path" => $banner_filename,
             "header_path" => $header_filename,
 
+            "votifier_ip" => $request->input("vote_ip"),
+            "votifier_port" => $request->input("vote_port"),
+            "votifier_key" => $request->input("votifier_key"),
+
             "ip" => $request->input("ip"),
             "port" => $request->input("port")
         ]);
@@ -339,34 +346,13 @@ class ServerController extends Controller
      */
     public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Show the vote form
-     * 
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function vote($id){
-        $server = Server::findOrFail($id);
-        return view("servers.vote")->with([
-            "server" => $server,
-            "path" => $server->user_id
-        ]);
-    }
-    /**
-     * Cast vote
-     * 
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function cast(Request $request, $id){
-        $server = Server::findOrFail($id);
-        $request->validate([
-            recaptchaFieldName() => recaptchaRuleName(),
-        ]);
+        $server = Server::where([
+            "id" => $id,
+            "user_id" => Auth::user()->id
+        ])->first();
+        
+        $server->delete();
+        return redirect(route("home"))->with("success", "The server has been deleted successfully");
     }
 
     /**
@@ -387,7 +373,7 @@ class ServerController extends Controller
                 return "created_at";
                 break;
             default:
-                return "is_online";
+                return "votes_count";
         }
     }
 

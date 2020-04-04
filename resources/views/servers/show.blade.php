@@ -10,7 +10,7 @@
     @endif
     
     <div class="row my-4">
-        <div class="col-6">
+        <div class="col-12 col-md-6">
 
             <div class="d-flex align-items-center w-100">
                 @if($server->has_icon)
@@ -20,15 +20,18 @@
             </div>
 
         </div>
-        <div class="col-6 text-right">
+        <div class="col-12 col-md-6 mt-3 mt-md-0 text-center text-md-right">
             @auth
                 @if($server->user_id == Auth::user()->id)
-                <a href="{{route('server.edit', ['server'=>$server->id])}}" class="btn btn-primary">Edit</a>
+                <div class="d-inline border-right mr-2 pr-1">
+                    <a href="{{route('analytics.basic', ['server'=>$server->id])}}" class="btn btn-dark">Analytics</a>
+                    <a href="{{route('server.edit', ['server'=>$server->id])}}" class="btn btn-primary">Edit</a>
+                </div>
                 @endif
             @endauth
-            <a href="" class="btn btn-dark mx-2">Share</a>
+            <a href="" class="btn btn-dark">Share</a>
             @if($server->website)
-                <a href="https://{{$server->website}}" rel="noopener" target="_blank" class="btn btn-primary mx-2">Website</a>
+                <a href="https://{{$server->website}}" rel="noopener" target="_blank" class="btn btn-primary">Website</a>
             @endif
             <a href="{{route("server.vote", ["server"=>$server->id])}}" class="btn btn-success">Vote</a>
         </div>
@@ -103,11 +106,11 @@
                         </tr>
                         <tr>
                             <th>Votes in {{date("F")}}</th>
-                            <td>10</td>
+                            <td>{{number_format($month_votes, 0)}}</td>
                         </tr>
                         <tr>
                             <th>Votes all time</th>
-                            <td>10</td>
+                            <td>{{number_format($alltime_votes, 0)}}</td>
                         </tr>
                         <tr>
                             <th>Owner</th>

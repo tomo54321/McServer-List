@@ -52,7 +52,7 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'username' => ['required', 'string', 'max:50', 'unique:users', 'regex:/^[A-Za-z0-9_]+$/'],
             recaptchaFieldName() => recaptchaRuleName(),
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'indisposable', 'max:255', 'unique:users'],
             'password' => [
                 'required', 
                 'string', 

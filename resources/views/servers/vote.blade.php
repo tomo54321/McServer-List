@@ -33,34 +33,59 @@
         </ol>
     </nav>
 
+    @error("vote")
+        <div class="alert alert-danger"><strong>Error</strong> {{$message}}</div>
+    @enderror
 
-    <div class="card mt-5">
-        <div class="card-header">Vote for {{$server->name}}</div>
-        <div class="card-body">
-            <form action="{{route("server.cast", ["server"=>$server->id])}}" method="POST">
-                @csrf
-
-                <div class="form-group">
-                    {!! ReCaptcha::htmlFormSnippet() !!}
-                    @error("g-recaptcha-response")
-                        <div class="invalid-feedback d-block">{{$message}}</div>
-                    @enderror
+    <div class="row align-items-center mt-5">
+        <div class="col-12 col-md-6">
+            <div class="card">
+                <div class="card-header">Vote for {{$server->name}}</div>
+                <div class="card-body">
+                    <p>You are able to vote every 24 hours.</p>
+                    <form action="{{route("server.cast", ["server"=>$server->id])}}" method="POST">
+                        @csrf
+        
+                        <div class="form-group">
+                            <label for="username">Minecraft Username</label>
+                            <input type="text" name="username" class="form-control @error('username') is-invalid @enderror" required placeholder="Minecraft Username"/>
+                            @error("username")
+                            <div class="invalid-feedback" role="alert"><strong>{{$message}}</strong></div>
+                            @enderror
+                        </div>
+        
+                        <div class="form-group">
+                            {!! ReCaptcha::htmlFormSnippet() !!}
+                            @error("g-recaptcha-response")
+                                <div class="invalid-feedback d-block">{{$message}}</div>
+                            @enderror
+                        </div>
+        
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-success" value="Cast Vote" />
+                        </div>
+        
+                    </form>
                 </div>
-
-                @if($server->votifier_enabled)
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" name="username" class="form-control @error('username') is-invalid @enderror" />
-                    </div>
-                @endif
-
-                <div class="form-group">
-                    <input type="submit" class="btn btn-success" value="Cast Vote" />
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h4>Why vote?</h4>
+                    <p>There are a few reasons to vote for {{$server->name}}:</p>
+                    <ul>
+                        <li>It helps {{$server->name}} to rank better in our listings</li>
+                        <li>It shows to the server owner that you enjoy their server</li>
+                        @if($server->enabled_votifier)
+                            <li>You could unlock in game items using Votifier</li>
+                        @endif
+                    </ul>
                 </div>
-
-            </form>
+            </div>
         </div>
     </div>
+
 
 </div>
 @endsection

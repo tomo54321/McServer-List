@@ -57,6 +57,35 @@ class Server extends Model
         "offline_since" => "datetime"
     ];
 
+    // this is a recommended way to declare event handlers
+    public static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($server) { // before delete() method call this
+
+            //Path for images.
+            $folder_path = "public/" . $server->user_id;
+
+            //Path exists already?
+            if (is_dir(storage_path("app/" . $folder_path))) {
+                if ($server->has_banner) {
+                    unlink(storage_path("app/" . $folder_path) . "/" . $server->banner_path);
+                }
+                if ($server->has_header) {
+                    unlink(storage_path("app/" . $folder_path) . "/" . $server->header_path);
+                }
+                if ($server->has_icon) {
+                    unlink(storage_path("app/" . $folder_path) . "/" . $server->icon_path);
+                }
+            }
+
+            $server->votes()->delete();
+            $server->cache_pings()->delete();
+            $server->offline_notifications()->delete();
+        });
+    }
+
     /**
      * Tags
      * 
@@ -72,10 +101,39 @@ class Server extends Model
      * 
      * @return \App\Model\User
      */
-    public function owner(){
+    public function owner()
+    {
         return $this->belongsTo("App\User", "user_id");
     }
 
+    /**
+     * Server Pings
+     * 
+     * @return \Illuminate\Support\Collection
+     */
+    public function cache_pings()
+    {
+        return $this->hasMany("App\ServerPing");
+    }
+
+    /**
+     * Offline notifications
+     * @return \Illuminate\Support\Collection
+     */
+    public function offline_notifications()
+    {
+        return $this->hasMany(ServerOfflineNotification::class);
+    }
+
+    /**
+     * Votes
+     * 
+     * @return \Illuminate\Support\Collection
+     */
+    public function votes()
+    {
+        return $this->hasMany("App\ServerVote");
+    }
 
     /**
      * Has Banner?
@@ -112,7 +170,8 @@ class Server extends Model
      * 
      * @return boolean
      */
-    public function getEnabledVotifierAttribute(){
+    public function getEnabledVotifierAttribute()
+    {
         return !is_null($this->votifier_key) && !is_null($this->votifier_port) && !is_null($this->votifier_ip);
     }
 
@@ -121,11 +180,10 @@ class Server extends Model
      * 
      * @return string
      */
-    public function getFullIpAttribute(){
-        return $this->ip.(($this->port==25565) ? "" : ":".$this->port);
+    public function getFullIpAttribute()
+    {
+        return $this->ip . (($this->port == 25565) ? "" : ":" . $this->port);
     }
-
-
 
     /**
      * Ping the server
@@ -172,16 +230,15 @@ class Server extends Model
                 $this->save();
 
                 $ex_notification = ServerOfflineNotification::where("server_id", $this->id)
-                ->whereDate("created_at", new \DateTime())
-                ->count();
+                    ->whereDate("created_at", new \DateTime())
+                    ->count();
                 //No notifications already
-                if($ex_notification < 1){
+                if ($ex_notification < 1) {
                     //Create Server Offline Notification
                     ServerOfflineNotification::create([
                         "server_id" => $this->id
                     ]);
                 }
-                
             }
         }
     }

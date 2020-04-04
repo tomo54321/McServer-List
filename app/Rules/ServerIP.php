@@ -26,6 +26,7 @@ class ServerIP implements Rule
     public function passes($attribute, $value)
     {
         $invalid_ip = ["localhost", "127.0.0.1", "0.0.0.0", "::1"];
+        $invalid_ip = [];
 
         return !in_array($value, $invalid_ip) 
         && substr( $value, 0, 8 ) !== "192.168."

@@ -119,6 +119,7 @@ return [
     'uuid' => 'The :attribute must be a valid UUID.',
 
     'recaptcha' => "The captcha is required.",
+    'indisposable' => 'You must use a valid email address.',
 
     /*
     |--------------------------------------------------------------------------

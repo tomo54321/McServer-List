@@ -49,7 +49,7 @@
             <label for="banner">Add your server banner</label>
             <div class="custom-file">
                 <input type="file" class="custom-file-input" id="banner" accept="image/x-png,image/gif,image/jpeg" name="banner" />
-                <label class="custom-file-label" for="banner">Server Banner</label>
+                <label class="custom-file-label" for="banner">Server Banner (468x60 pixels)</label>
             </div>
             @error("banner")
             <div class="invalid-feedback d-block" role="alert">{{ $message }}</div>
@@ -124,7 +124,7 @@
                     <div class="form-group">
                         <label for="vote_port">Votifier Port</label>
                         <input type="number" name="vote_port" id="vote_port" class="form-control @error('vote_port')is-invalid @enderror"
-                            placeholder="Votifier Port" value="{{old('vote_port')}}" autocomplete="off" />
+                            placeholder="Votifier Port" value="{{old('vote_port') ?? '8192'}}" autocomplete="off"/>
                         @error("vote_port")
                         <div class="invalid-feedback" role="alert">{{$message}}</div>
                         @enderror
