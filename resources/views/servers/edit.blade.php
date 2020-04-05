@@ -69,11 +69,16 @@
             <span class="text-muted d-block">Current Banner</span>
             <img src="{{asset( "storage/".$server->user_id."/".$server->banner_path )}}" alt="{{$server->name}}"
                 class="d-block mb-3" />
+
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="remove_banner" name="remove_banner">
+                <label class="custom-control-label text-danger" for="remove_banner">Remove banner?</label>
+            </div>
             @endif
             <div class="custom-file">
                 <input type="file" class="custom-file-input" id="banner" accept="image/x-png,image/gif,image/jpeg"
                     name="banner" />
-                <label class="custom-file-label" for="banner">Server Banner</label>
+                <label class="custom-file-label" for="banner">Server Banner (468x60 pixels)</label>
             </div>
             @error("banner")
             <div class="invalid-feedback d-block" role="alert">{{ $message }}</div>
@@ -84,13 +89,18 @@
             <label for="header">Upload a screenshot of your server</label>
             @if($server->has_header)
             <span class="text-muted d-block">Current Header</span>
-            <img src="{{asset( "storage/".$server->user_id."/".$server->has_header )}}" alt="{{$server->name}}"
+            <img src="{{asset( "storage/".$server->user_id."/".$server->header_path )}}" alt="{{$server->name}}"
                 class="d-block mb-3" height="100px" />
+
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="remove_header" name="remove_header">
+                <label class="custom-control-label text-danger" for="remove_header">Remove header?</label>
+            </div>
             @endif
             <div class="custom-file">
                 <input type="file" class="custom-file-input" id="header" accept="image/x-png,image/gif,image/jpeg"
                     name="header" />
-                <label class="custom-file-label" for="header">Server Heading Image</label>
+                <label class="custom-file-label" for="banner">Server Header (Reccomended 1110x200)</label>
             </div>
             @error("header")
             <div class="invalid-feedback d-block" role="alert">{{ $message }}</div>
@@ -272,6 +282,7 @@
             $("#votifier_support").slideDown("fast");
         } else {
             $("#votifier_support").slideUp("fast");
+            $("#vote_ip, #vote_port, #votifier_key").val("");
         }
     });
 

@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 
+use Intervention\Image\ImageManagerStatic as Image;
+
 use xPaw\MinecraftPing;
 use xPaw\MinecraftPingException;
 
@@ -26,8 +28,10 @@ class ServerController extends Controller
     {
         $this->middleware("auth")->except(["index", "show", "vote", "cast"]);
 
+        $this->middleware("verified")->only(["create", "store", "edit", "update"]);
+
         //Only allow 2 requests every 1 minute to update a server.
-        $this->middleware("throttle:2,1")->only(["update"]);
+        // $this->middleware("throttle:2,1")->only(["update"]);
     }
 
     /**
@@ -136,8 +140,10 @@ class ServerController extends Controller
             $banner_path = $request->file("banner")->storeAs($folder_path, $banner_filename);
         }
         if (!is_null($request->file("header"))) {
-            $header_filename = md5(time() . $request->file("header")->getClientOriginalName()) . "." . $request->file("header")->getClientOriginalExtension();
-            $header_path =  $request->file("header")->storeAs($folder_path, $header_filename);
+            $header_filename = md5(time() . $request->file("header")->getClientOriginalName()) . ".jpg";
+            $header_path = storage_path("app/" . $folder_path) . "/" .$header_filename;
+            Image::make($request->file("header"))->fit(1110, 200)->save($header_path , 60, "jpg");
+            unset($header_path);
         }
 
 
@@ -297,14 +303,25 @@ class ServerController extends Controller
             $banner_filename = md5(time() . $request->file("banner")->getClientOriginalExtension()) . "." . $request->file("banner")->getClientOriginalExtension();
             $banner_path = $request->file("banner")->storeAs($folder_path, $banner_filename);
         }
+        if(!is_null($request->input("remove_banner")) && $server->has_banner && is_null($request->file("banner")) ){
+            unlink(storage_path("app/" . $folder_path) . "/" . $server->banner_path);
+            $banner_filename = null;
+        }
+
         if (!is_null($request->file("header"))) {
 
             if ($server->has_header) {
                 unlink(storage_path("app/" . $folder_path) . "/" . $server->header_path);
             }
 
-            $header_filename = md5(time() . $request->file("header")->getClientOriginalName()) . "." . $request->file("header")->getClientOriginalExtension();
-            $header_path =  $request->file("header")->storeAs($folder_path, $header_filename);
+            $header_filename = md5(time() . $request->file("header")->getClientOriginalName()) . ".jpg";
+            $header_path = storage_path("app/" . $folder_path) . "/" .$header_filename;
+            Image::make($request->file("header"))->fit(1110, 200)->save($header_path , 60, "jpg");
+            unset($header_path);
+        }
+        if(!is_null($request->input("remove_header")) && $server->has_header && is_null($request->file("header")) ){
+            unlink(storage_path("app/" . $folder_path) . "/" . $server->header_path);
+            $header_filename = null;
         }
 
 

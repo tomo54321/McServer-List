@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Server;
+use App\ServerEventLog;
 use App\ServerPing;
 use App\ServerVote;
 use Carbon\Carbon;
@@ -40,9 +42,11 @@ class AnalyticsController extends Controller
         
         $votes = [];
         $players = [];
+        $ipcopies = [];
         foreach($range as $date){
             $votes[] = ServerVote::whereDate("created_at", $date)->where("server_id", $server_id)->count();
             $pc = ServerPing::whereDate("created_at", $date)->where("server_id", $server_id)->first();
+            $ipcopies[] = ServerEventLog::whereDate("created_at", $date)->where(["server_id" => $server_id, "event_type"=>ServerEventLog::EventType("IPCopy")])->count();
             $players[] = is_null($pc) ? 0 : $pc->online_players;
             unset($pc);
             unset($date);
@@ -52,7 +56,8 @@ class AnalyticsController extends Controller
             "server" => $server,
             "dates" => $range,
             "votes" => $votes,
-            "players" => $players
+            "players" => $players,
+            "ipcopies" => $ipcopies
         ]);
 
     }

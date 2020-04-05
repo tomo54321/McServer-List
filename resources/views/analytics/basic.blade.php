@@ -27,6 +27,13 @@
             <canvas height="300px" width="100%" id="players"></canvas>
         </div>
     </div>
+
+    <div class="card mt-3">
+        <div class="card-header">IP Copies</div>
+        <div class="card-body">
+            <canvas height="300px" width="100%" id="ipcopies"></canvas>
+        </div>
+    </div>
 </div>
 @endsection
 
@@ -35,6 +42,7 @@
 <script>
 var voteCTX = document.getElementById('votes').getContext('2d');
 var playerCTX = document.getElementById('players').getContext('2d');
+var ipCopiesCTX = document.getElementById('ipcopies').getContext('2d');
 var chartOptions = {
     scales: {
         yAxes: [{
@@ -78,6 +86,24 @@ var playersChart = new Chart(playerCTX, {
             ],
             borderColor: [
                 '#9561e2',
+            ],
+            borderWidth: 2
+        }]
+    },
+    options: chartOptions
+});
+var ipChart = new Chart(ipCopiesCTX, {
+    type: 'line',
+    data: {
+        labels: chartDates,
+        datasets: [{
+            label: '# of IP Copies',
+            data: [@foreach($ipcopies as $ipc) {{$ipc}}, @endforeach],
+            backgroundColor: [
+                'rgba(246, 109, 155, 0.2)',
+            ],
+            borderColor: [
+                '#f66d9b',
             ],
             borderWidth: 2
         }]

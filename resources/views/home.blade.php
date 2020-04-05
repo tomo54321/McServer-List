@@ -2,9 +2,13 @@
 
 @section('content')
 <div class="container">
-    <h1>Servers</h1>
+    <h1>Server List</h1>
     @if(!is_null($query))
     <p class="text-muted">Based off the search term {{$query}}</p>
+    @endif
+
+    @if(\Session::has("success"))
+    <div class="alert alert-success"><strong>Success</strong> {{\Session::get("success")}}</div>
     @endif
 
     @if($errors->any())
@@ -76,7 +80,7 @@
     <div class="card my-3">
         <div class="card-body px-2 py-3">
             <div class="row align-items-center">
-                <div class="col-2 text-center">
+                <div class="col-4 col-sm-2 text-center">
                     @if($srv->has_icon)
                     <a href="{{route('server.show', ['server'=>$srv->id])}}">
                         <img src="{{asset("storage/".$srv->user_id."/".$srv->icon_path)}}" alt="{{$srv->name}}" />
@@ -86,15 +90,15 @@
                         class="h5 text-dark font-weight-bold">{{$srv->name}}</a>
                     @endif
                 </div>
-                <div class="col-7">
+                <div class="col-8 col-sm-7">
 
                     <div class="server-ip-container">
                         <a href="{{route('server.show', ['server'=>$srv->id])}}">
                             <img src="{{$srv->has_banner ? asset("storage/".$srv->user_id."/".$srv->banner_path) : "https://placehold.it/468x60"}}"
                                 class="d-none d-md-block" alt="{{$srv->name}}" width="100%" height="auto" />
                         </a>
-                        <div class="server-ip d-flex align-items-center ip-copy-btn" data-ip="{{$srv->full_ip}}">
-                            <p class="flex-grow-1">{{$srv->full_ip}}</p>
+                        <div class="server-ip d-flex align-items-center ip-copy-btn" data-ip="{{$srv->full_ip}}" data-server="{{$srv->id}}">
+                            <p class="flex-grow-1 text-truncate">{{$srv->full_ip}}</p>
                             <span class="badge badge-dark d-none d-sm-inline mx-1">{{$srv->version_string}}</span>
                             <button type="button" class="btn btn-sm">Copy
                                 IP</button>
@@ -107,7 +111,7 @@
                     </div>
 
                 </div>
-                <div class="col-3 text-center">
+                <div class="d-none d-sm-block col-3 text-center">
                     <p class="mb-0">{{$srv->online_players}} / {{$srv->max_players}}</p>
                     <small class="d-block mb-3">Players Online</small>
                     <a href="{{route('server.show', ['server'=>$srv->id])}}"
@@ -146,11 +150,14 @@
     $(document).ready(function(){
         $(".ip-copy-btn").click(function(){
             var ip = $(this).data("ip");
+            var server = $(this).data("server");
             var $temp = $("<input>");
             $("body").append($temp);
             $temp.val(ip).select();
             document.execCommand("copy");
             $temp.remove();
+
+            $.get("/api/server/"+server+"/copy");
 
             $(this).children(".btn").text("Copied");
             var btn = $(this).children(".btn");

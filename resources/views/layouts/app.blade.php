@@ -9,6 +9,11 @@
 
     <title>{{ config('app.name', 'Laravel') }} @if(isset($pagename))- {{$pagename}}@endif</title>
 
+    <meta name="description" content="{{ isset($pagedesc) ? $pagedesc : __('Discover the best Minecraft servers with our multiplayer server list. Advertise your server for free and get more players!') }}" />
+    <meta name="keywords" content="minecraft, minecraft servers, minecraft server list, mc server list" />
+    <link rel="canonical" href="{{URL()->current()}}" />
+    <link rel="home" href="{{config("app.url")}}" />
+
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
     {!! htmlScriptTagJsApi() !!}
@@ -64,8 +69,8 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item">My Servers</a>
-                                    <a class="dropdown-item">Account Settings</a>
+                                    <a href="{{route('account.servers')}}" class="dropdown-item">My Servers</a>
+                                    <a class="dropdown-item" href="{{route('account.settings')}}">Account Settings</a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -86,6 +91,49 @@
         <main class="py-4">
             @yield('content')
         </main>
+
+        <footer class="my-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 text-center text-md-left col-md-3 mb-3 mb-md-0">
+                        <span class="h4 font-weight-bold">{{config("app.name")}}</span>
+                        <span class="d-block text-muted">&copy; {{date("Y")}} All rights reserved.</span>
+                        <small class="text-muted">Minecraft and all associated Minecraft images are copyright of Mojang AB. {{config("app.name")}} is not affiliated with Minecraft or Mojang AB.</small>
+                    </div>
+                    <div class="col-6 text-center text-md-left col-md-3">
+                        <ul>
+                            <li class="title">Directory</li>
+                            <li><a href="{{route('home')}}">All Servers</a></li>
+                            <li><a href="{{route('home')}}?sortby=newest">Newest Servers</a></li>
+                            <li><a href="{{route('home')}}?sortby=updated">Recently Updated Servers</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-6 text-center text-md-left col-md-3">
+                        <ul>
+                            <li class="title">Account</li>
+                            @auth
+                                <li><a href="{{route('server.create')}}">Add Server</a></li>
+                                <li><a href="{{route('account.servers')}}">My Servers</a></li>
+                                <li><a href="{{route('account.settings')}}">Account Settings</a></li>
+                            @else
+                            <li><a href="{{route('login')}}">Login</a></li>
+                            <li><a href="{{route('register')}}">Register</a></li>
+                            @endauth
+                        </ul>
+                    </div>
+
+                    <div class="col-12 text-center text-md-left col-md-3 mt-3 mt-md-0">
+                        <ul>
+                            <li class="title">Legal</li>
+                            <li><a href="{{route('server.create')}}">Terms and Conditions</a></li>
+                            <li><a href="{{route('account.servers')}}">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </footer>
     </div>
 
     @yield("inline-script")

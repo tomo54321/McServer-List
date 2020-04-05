@@ -21,4 +21,13 @@ Route::post("/server/{server}/vote", "VoteController@cast")->name("server.cast")
 
 Route::get("/analytics/{server}", "AnalyticsController@basic")->name("analytics.basic");
 
+Route::name("account.")->prefix("account")->group(function(){
+    Route::get("servers", "AccountController@servers")->name("servers");
+    Route::get("settings", "AccountController@settings")->name("settings");
+    Route::put("settings/details", "AccountController@details")->name("settings.details");
+    Route::put("settings/password", "AccountController@password")->name("settings.password");
+    Route::delete("/", "AccountController@destory")->name("destroy");
+});
+
+
 Auth::routes(["verify"=>true]);

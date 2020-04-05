@@ -60,7 +60,7 @@
             <label for="header">Upload a screenshot of your server</label>
             <div class="custom-file">
                 <input type="file" class="custom-file-input" id="header" accept="image/x-png,image/gif,image/jpeg" name="header" />
-                <label class="custom-file-label" for="header">Server Heading Image</label>
+                <label class="custom-file-label" for="banner">Server Header (Reccomended 1110x200)</label>
             </div>
             @error("header")
             <div class="invalid-feedback d-block" role="alert">{{ $message }}</div>

@@ -29,9 +29,9 @@
                 </div>
                 @endif
             @endauth
-            <a href="" class="btn btn-dark">Share</a>
+            <a href="#" data-toggle="modal" data-target="#shareModal" class="btn btn-dark">Share</a>
             @if($server->website)
-                <a href="https://{{$server->website}}" rel="noopener" target="_blank" class="btn btn-primary">Website</a>
+                <a href="#" data-toggle="modal" data-target="#websiteWarning" class="btn btn-primary">Website</a>
             @endif
             <a href="{{route("server.vote", ["server"=>$server->id])}}" class="btn btn-success">Vote</a>
         </div>
@@ -43,6 +43,10 @@
           <li class="breadcrumb-item active" aria-current="page">{{$server->name}}</li>
         </ol>
     </nav>
+
+    @if(\Session::has("success"))
+        <div class="alert alert-success">{{\Session::get("success")}}</div>
+    @endif
 
     <div class="row">
         <div class="col-12 col-md-6">
@@ -138,6 +142,52 @@
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="shareModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="shareModalLabel">Share {{$server->name}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Share {{$server->name}} using the following link:</p>
+                <input type="text" disabled readonly class="form-control" value="{{URL()->current()}}" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if($server->website)
+<div class="modal fade" id="websiteWarning" tabindex="-1" role="dialog" aria-labelledby="websiteWarningLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="websiteWarningLabel">External Website Warning</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Warning, you are about to leave {{config("app.name")}} and visit a 3rd party website.</p>
+                <p>We have no control over the the website you are about to visit, including the content</p>
+                <p>You are going to: <b>{{$server->website}}</b></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Stay Here</button>
+                <a href="http://{{$server->website}}" class="btn">Go</a>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+
 @endsection
 
 @section("inline-script")
@@ -150,6 +200,8 @@
             $temp.val(ip).select();
             document.execCommand("copy");
             $temp.remove();
+
+            $.get("/api/server/{{$server->id}}/copy");
 
             $(this).text("Copied");
             setTimeout(function(){

@@ -4,6 +4,9 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Rules\ServerIP;
+use App\Server;
+use App\ServerEventLog;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use xPaw\MinecraftPing;
@@ -21,6 +24,9 @@ class ServerController extends Controller
     {
         //Only allow 3 requests every 1 minute to ping a server.
         $this->middleware("throttle:3,1")->only(["ping"]);
+
+        //Only allow 2 request every 1 minute for copy ip event
+        $this->middleware("throttle:2,1")->only(["ipCopyEvent"]);
     }
     /**
      * Ping server
@@ -51,5 +57,26 @@ class ServerController extends Controller
             ]);
         }
 
+    }
+
+    /**
+     * IP Copy Event
+     * @param \Illuminate\Http\Request $request
+     * @param int $server
+     * @return \Illuminate\Http\Response
+     */
+    public function ipCopyEvent(Request $request, $server){
+        $srv = Server::findOrFail($server);
+        $log = ServerEventLog::where(["ip"=>$request->ip(), "server_id"=>$server])->whereDate("created_at", Carbon::now())->first();
+        if(!is_null($log)){
+            return response()->json(["success"=>false, "message"=>"Duplicate Event."]);
+        }
+        ServerEventLog::create([
+            "ip"=>$request->ip(),
+            "server_id"=>$server,
+            "event_type"=>ServerEventLog::EventType("IPCopy")
+        ]);
+
+        return response()->json(["success"=>true]);
     }
 }
