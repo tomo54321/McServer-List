@@ -64,9 +64,12 @@ class ServerController extends Controller
             $servers->where("name", "like", "%{$request->input("query")}%");
         }
 
+        $promoted_servers = Server::where("featured_until", "!=", null)->get();
+
         return view("home")->with([
             "tags" => Tag::all(),
             "servers" => $servers->paginate(10),
+            "promoted" => $promoted_servers,
             "query" => $request->input("query")
         ]);
     }

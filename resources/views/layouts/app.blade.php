@@ -44,6 +44,9 @@
                         <li class="nav-item">
                             <a href="{{route('home')}}" class="nav-link">Servers</a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{route('auction.current')}}" class="nav-link">Sponsored Server</a>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -126,8 +129,8 @@
                     <div class="col-12 text-center text-md-left col-md-3 mt-3 mt-md-0">
                         <ul>
                             <li class="title">Legal</li>
-                            <li><a href="{{route('server.create')}}">Terms and Conditions</a></li>
-                            <li><a href="{{route('account.servers')}}">Privacy Policy</a></li>
+                            <li><a href="{{route('legal.terms')}}">Terms and Conditions</a></li>
+                            <li><a href="{{route('legal.privacy')}}">Privacy Policy</a></li>
                         </ul>
                     </div>
 

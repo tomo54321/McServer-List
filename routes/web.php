@@ -29,5 +29,18 @@ Route::name("account.")->prefix("account")->group(function(){
     Route::delete("/", "AccountController@destory")->name("destroy");
 });
 
+Route::name("auction.")->prefix("sponsored")->group(function(){
+    Route::get("/", ["uses"=>"BiddingController@auction"])->name("current");
+    Route::post("/", ["uses"=>"BiddingController@bid"])->name("bid");
+});
+
+
+Route::get("/legal/terms", function(){
+    return view("legal.terms");
+})->name("legal.terms");
+
+Route::get("/legal/privacy", function(){
+    return view("legal.privacy");
+})->name("legal.privacy");
 
 Auth::routes(["verify"=>true]);
