@@ -107,7 +107,7 @@
                         <ul>
                             <li class="title">Directory</li>
                             <li><a href="{{route('home')}}">All Servers</a></li>
-                            <li><a href="{{route('home')}}?sortby=newest">Newest Servers</a></li>
+                            <li><a href="{{route('home')}}?sortby=added">Newest Servers</a></li>
                             <li><a href="{{route('home')}}?sortby=updated">Recently Updated Servers</a></li>
                         </ul>
                     </div>
