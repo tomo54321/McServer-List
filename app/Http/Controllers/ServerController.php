@@ -184,7 +184,7 @@ class ServerController extends Controller
         //Create initial ping for today.
         ServerPing::create([
             "server_id" => $server->id,
-            "players_online" => $Query["players"]["online"]
+            "players_online" => $server->online_players
         ]);
 
         foreach ($request->input("tags") as $tag) {
