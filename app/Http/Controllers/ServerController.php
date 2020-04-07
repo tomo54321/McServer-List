@@ -51,7 +51,9 @@ class ServerController extends Controller
 
         //Category Filter
         if (!is_null($request->input("category"))) {
-            $servers->where("category_id", $request->input("category"));
+            $servers->whereHas("tags", function($q) use ($request){
+                $q->where("tag_id", $request->input("category"));
+            });
         }
         //Order By Filter
         $servers->orderBy(
