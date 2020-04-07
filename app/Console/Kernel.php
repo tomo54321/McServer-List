@@ -28,11 +28,15 @@ class Kernel extends ConsoleKernel
 
         //Update server ping cache
         $schedule->command("servers:ping")->hourly();
+        
         //Update server featured
         // $schedule->command("servers:featured")->hourly();
 
         //Update disposable email address list
         $schedule->command('disposable:update')->weekly();
+
+        //Update cloudflare ip list
+        $schedule->command('cloudflare:reload')->weekly();
     }
 
     /**

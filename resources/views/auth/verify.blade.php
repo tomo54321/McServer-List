@@ -21,7 +21,7 @@
                 @csrf
                 <center>
                 <button type="submit"
-                    class="btn btn-primary">{{ __('click here to request another') }}</button></center>
+                    class="btn btn-primary">{{ __('Click here to request another') }}</button></center>
             </form>
         </div>
     </div>
