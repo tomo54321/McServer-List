@@ -257,7 +257,7 @@ class ServerController extends Controller
             "ip" => ["required", "string", "min:2", new ServerIP],
             "port" => ["required", "string"],
             "banner" => ["nullable", "image", "mimes:jpeg,jpg,png,gif", "max:1024"],
-            "header" => ["nullable", "mimes:jpeg,jpg,png,gif", "max:1024"],
+            "header" => ["nullable", "mimes:jpeg,jpg,png,gif", "max:2048"],
             "youtubeid" => ["nullable", "string"],
             "website" => ["nullable", "string"],
             "desc" => ["required", "string", "min:10"],
