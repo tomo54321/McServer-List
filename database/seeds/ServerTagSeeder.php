@@ -29,13 +29,13 @@ class ServerTagSeeder extends Seeder
             "Roleplay",
             "PVP",
             "No PVP",
+            "PVE",
             "No PVE",
             "Whitelist",
             "Hunger Games",
             "Survival Games",
             "Factions",
             "Hardcore Factions",
-            "CTF",
             "Capture the flag",
             "McMMO",
             "Economy",
@@ -46,9 +46,7 @@ class ServerTagSeeder extends Seeder
             "KitPVP",
             "Mini Games",
             "Prison",
-            "Hub",
             "Network",
-            "FTop"
         ];
 
         foreach($tags as $t){
