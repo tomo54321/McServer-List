@@ -44,9 +44,9 @@
                         <li class="nav-item">
                             <a href="{{route('home')}}" class="nav-link">Servers</a>
                         </li>
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a href="{{route('auction.current')}}" class="nav-link">Sponsored Server</a>
-                        </li>
+                        </li> --}}
                     </ul>
 
                     <!-- Right Side Of Navbar -->

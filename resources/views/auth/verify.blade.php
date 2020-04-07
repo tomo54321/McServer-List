@@ -1,28 +1,31 @@
-@extends('layouts.app')
+@extends('layouts.app',[
+"pagename"=>"Email verification required"
+])
 
 @section('content')
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Verify Your Email Address') }}</div>
+    <h1>Email verification required</h1>
+    @if (session('resent'))
+    <div class="alert alert-success" role="alert">
+        {{ __('A new verification email has been sent to your email address, please allow up to 5 minutes for it to arrive.') }}
+    </div>
+    @endif
 
-                <div class="card-body">
-                    @if (session('resent'))
-                        <div class="alert alert-success" role="alert">
-                            {{ __('A fresh verification link has been sent to your email address.') }}
-                        </div>
-                    @endif
+    <div class="card">
+        <div class="card-header">Verify Email</div>
+        <div class="card-body">
+            <p>Before you can begin adding or editing your servers you must verify your email address, please be sure to check your inbox and junk box.</p>
+            <p>If the verification email is missing you can request a new one by clicking the link below.</p>
 
-                    {{ __('Before proceeding, please check your email for a verification link.') }}
-                    {{ __('If you did not receive the email') }},
-                    <form class="d-inline" method="POST" action="{{ route('verification.resend') }}">
-                        @csrf
-                        <button type="submit" class="btn btn-link p-0 m-0 align-baseline">{{ __('click here to request another') }}</button>.
-                    </form>
-                </div>
-            </div>
+            <form method="POST" action="{{ route('verification.resend') }}">
+                @csrf
+                <center>
+                <button type="submit"
+                    class="btn btn-primary">{{ __('click here to request another') }}</button></center>
+            </form>
         </div>
     </div>
+
+
 </div>
 @endsection
