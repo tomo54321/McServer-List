@@ -20,7 +20,7 @@ class PingServers extends Command
      *
      * @var string
      */
-    protected $description = 'Ping servers that haven\'t been pinged in the last 2 hours.';
+    protected $description = 'Ping servers that haven\'t been pinged in the last hour.';
 
     /**
      * Create a new command instance.
@@ -39,7 +39,7 @@ class PingServers extends Command
      */
     public function handle()
     {
-        $servers = Server::where("last_pinged", "<", Carbon::now()->subHours(2))->get();
+        $servers = Server::where("last_pinged", "<", Carbon::now()->subHours(1))->get();
         foreach($servers as $srv){
             if(!$srv->is_online){
 

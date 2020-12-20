@@ -43,6 +43,14 @@
     overflow-x: hidden;
 }
 
+.btn{
+    &.btn-discord{
+        color: #fff;
+        background-color: #7289da;
+        border-color: #7289da;
+    }
+}
+
 footer ul{
     margin:0;
     padding:0;

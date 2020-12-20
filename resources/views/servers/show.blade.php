@@ -33,6 +33,9 @@
             @if($server->website)
                 <a href="#" data-toggle="modal" data-target="#websiteWarning" class="btn btn-primary">Website</a>
             @endif
+            @if($server->discord)
+                <a href="https://discord.gg/{{ $server->discord }}" target="_blank" rel="noreferrer" class="btn btn-discord">Discord</a>
+            @endif
             <a href="{{route("server.vote", ["server"=>$server->id])}}" class="btn btn-success">Vote</a>
         </div>
     </div>
@@ -108,6 +111,17 @@
                             <th>Players</th>
                             <td>{{$server->online_players ?? 0}} / {{$server->max_players ?? 0}}</td>
                         </tr>
+                        @if($server->country)
+                        <tr>
+                            <th>Country</th>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img src="{{ asset('img/flags/' . $server->country . '.png') }}" alt="{{ \Countries::getOne($server->country, 'en') }}" /> 
+                                    <span class="pl-2">{{ \Countries::getOne($server->country, 'en') }}</span>
+                                </div>
+                            </td>
+                        </tr>
+                        @endif
                         <tr>
                             <th>Votes in {{date("F")}}</th>
                             <td>{{number_format($month_votes, 0)}}</td>

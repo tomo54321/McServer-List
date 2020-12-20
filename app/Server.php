@@ -28,6 +28,8 @@ class Server extends Model
 
         'description',
         'website',
+        'discord',
+        'country',
 
         'youtube_id',
 
@@ -208,7 +210,8 @@ class Server extends Model
                 $this->save();
 
 
-                $ping = ServerPing::whereDate("created_at", new \DateTime())
+                // Check if there's a ping within the hour.
+                $ping = ServerPing::where("created_at", ">", Carbon::now()->subHours(1))
                     ->where("server_id", $this->id)->first();
                 if (is_null($ping)) {
                     $ping = new ServerPing;

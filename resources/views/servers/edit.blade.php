@@ -100,7 +100,7 @@
             <div class="custom-file">
                 <input type="file" class="custom-file-input" id="header" accept="image/x-png,image/gif,image/jpeg"
                     name="header" />
-                <label class="custom-file-label" for="banner">Server Header (Reccomended 1110x200)</label>
+                <label class="custom-file-label" for="banner">Server Header (Recommended 1110x200)</label>
             </div>
             @error("header")
             <div class="invalid-feedback d-block" role="alert">{{ $message }}</div>
@@ -136,6 +136,35 @@
             <div class="invalid-feedback d-block" role="alert">{{ $message }}</div>
             @enderror
         </div>
+
+        <div class="form-group">
+            <label for="discord">Server's Discord</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">https://discord.gg/</span>
+                </div>
+                <input type="text" name="discord" id="discord" class="form-control @error('discord')is-invalid @enderror"
+                    placeholder="DiscordServerInvite" value="{{old('discord') ?? $server->discord}}" autocomplete="off" />
+            </div>
+            @error("discord")
+            <div class="invalid-feedback d-block" role="alert">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="country">Server Country</label>
+            <select id="country" name="country" class="form-control @error('country')is-invalid @enderror">
+                <option value="" @if(is_null($server->country))selected @endif>No Country</option>
+                @foreach($countries as $val => $country)
+                <option value="{{ $val }}" 
+                @if((is_null(old("country")) && $server->country == $val) || (!is_null(old("country")) && old("country") == $val ))selected @endif>{{ $country }}</option>
+                @endforeach
+            </select>
+            @error("country")
+            <div class="invalid-feedback d-block" role="alert">{{ $message }}</div>
+            @enderror
+        </div>
+
 
         <div class="form-group">
             <label for="desc">Server Description<span class="text-danger">*</span></label>

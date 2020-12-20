@@ -22,8 +22,6 @@ class ServerController extends Controller
      */
     public function __construct()
     {
-        //Only allow 3 requests every 1 minute to ping a server.
-        $this->middleware("throttle:3,1")->only(["ping"]);
 
         //Only allow 2 request every 1 minute for copy ip event
         $this->middleware("throttle:2,1")->only(["ipCopyEvent"]);
@@ -42,6 +40,10 @@ class ServerController extends Controller
         try{
             $Query = new MinecraftPing($request->input("ip"), $request->input("port"));
             $server = $Query->Query();
+            if(!$server){
+                throw new MinecraftPingException("Failed to connect");
+            }
+
             return response()->json([
                 "success"=>true,
                 "server"=>[

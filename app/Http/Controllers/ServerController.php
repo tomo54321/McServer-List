@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Rules\ServerIP;
+use App\Rules\ValidCountry;
 use App\Server;
 use App\ServerPing;
 use App\ServerTag;
@@ -83,7 +84,11 @@ class ServerController extends Controller
      */
     public function create()
     {
-        return view("servers.create")->with(["tags" => Tag::all()]);
+        return view("servers.create")
+        ->with([
+            "tags" => Tag::all(),
+            "countries" => json_decode(\Countries::getList('en', 'json'), true)
+        ]);
     }
 
     /**
@@ -102,6 +107,8 @@ class ServerController extends Controller
             "header" => ["nullable", "mimes:jpeg,jpg,png,gif", "max:2048"],
             "youtubeid" => ["nullable", "string"],
             "website" => ["nullable", "string"],
+            "discord" => ["nullable", "string"],
+            "country" => ["nullable", "string", "min:2", "max:2", new ValidCountry],
             "desc" => ["required", "string", "min:10"],
             "vote_ip" => ["required_with:votifier_key", new ServerIP],
             "vote_port" => ["required_with:vote_ip,votifier_key"],
@@ -110,7 +117,6 @@ class ServerController extends Controller
             "tags.*" => ["numeric", "exists:tags,id"],
             recaptchaFieldName() => recaptchaRuleName(),
         ]);
-
 
         //Already tracking the server?
         $serv = Server::where([
@@ -167,6 +173,7 @@ class ServerController extends Controller
             "name" => $request->input("name"),
             "description" => $request->input("desc"),
             'website' => $request->input("website"),
+            'discord' => $request->input("discord"),
             "youtube_id" => $request->input("youtubeid"),
 
             "banner_path" => $banner_filename,
@@ -236,6 +243,7 @@ class ServerController extends Controller
         return view("servers.edit")->with([
             "tags" => Tag::all(),
             "server_tags" => $server->tags,
+            "countries" => json_decode(\Countries::getList('en', 'json'), true),
             "server" => $server
         ]);
     }
@@ -262,6 +270,8 @@ class ServerController extends Controller
             "header" => ["nullable", "mimes:jpeg,jpg,png,gif", "max:2048"],
             "youtubeid" => ["nullable", "string"],
             "website" => ["nullable", "string"],
+            "discord" => ['nullable', 'string'],
+            "country" => ["nullable", "string", "min:2", "max:2", new ValidCountry],
             "desc" => ["required", "string", "min:10"],
             "vote_ip" => ["required_with:votifier_key", new ServerIP],
             "vote_port" => ["required_with:vote_ip,votifier_key"],
@@ -335,6 +345,8 @@ class ServerController extends Controller
             "name" => $request->input("name"),
             "description" => $request->input("desc"),
             'website' => $request->input("website"),
+            'discord' => $request->input("discord"),
+            'country' => $request->input("country"),
             "youtube_id" => $request->input("youtubeid"),
 
             "banner_path" => $banner_filename,
