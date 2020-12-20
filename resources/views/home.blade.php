@@ -19,7 +19,7 @@
 
     @if($promoted->count() > 0)
     <h1>Featured Servers</h1>
-    <div id="servers-list" class="container-fluid">
+    <div id="servers-list">
 
         @foreach($servers as $srv)
 
@@ -87,7 +87,7 @@
         </div>
     </div>
 
-    <div id="server-list" class="container-fluid">
+    <div id="server-list">
 
         @if($servers->count() < 1) <div class="card mt-5">
             <div class="card-body text-center">
@@ -105,7 +105,7 @@
 
 </div>
 
-<div class="card my-5">
+<div class="card mt-3 mb-5">
     <div class="card-body">
         <div class="row">
             <div class="col-6">

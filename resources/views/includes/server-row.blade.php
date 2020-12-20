@@ -1,4 +1,4 @@
-<div class="card my-3">
+<div class="card mt-3">
     <div class="card-body px-2 py-3">
         <div class="row align-items-center">
             <div class="col-4 col-sm-2 text-center">

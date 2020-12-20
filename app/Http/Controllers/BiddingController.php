@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\BidSession;
 use App\Bid;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -27,6 +28,11 @@ class BiddingController extends Controller
      */
     public function auction(Request $request){
         $auction = BidSession::orderBy("id", "DESC")->first();
+
+        if($auction->finishes_at < Carbon::now()){
+            return redirect(route("auction.previous", ['auction' => $auction->id]));
+        }
+
         return view("auction.current")->with([
             "auction"=>$auction,
             "bids"=>$auction->bids()->take(20)->get(),
@@ -58,5 +64,25 @@ class BiddingController extends Controller
 
         return redirect()->back()->with("success", "Your bid has been placed");
 
+    }
+
+     /**
+     * Previous Auction
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @param \App\BidSession $auction
+     * @return \Illuminate\Http\Response
+     */
+    public function previous(Request $request, BidSession $auction){
+        $auction = BidSession::orderBy("id", "DESC")->first();
+
+        if($auction->finishes_at > Carbon::now()){
+            return redirect(route("auction.current"));
+        }
+
+        return view("auction.previous")->with([
+            "auction"=>$auction,
+            "bids"=>$auction->bids()->take(4)->orderBy("amount", "DESC")->get(), // Winning bids
+        ]);
     }
 }
