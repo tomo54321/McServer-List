@@ -29,12 +29,16 @@ Route::name("account.")->prefix("account")->group(function(){
     Route::delete("/", "AccountController@destory")->name("destroy");
 });
 
-Route::name("auction.")->prefix("sponsored")->group(function(){
-    Route::get("/", ["uses"=>"BiddingController@auction"])->name("current");
-    Route::get("/{auction}", ["uses"=>"BiddingController@previous"])->name("previous");
-    Route::post("/", ["uses"=>"BiddingController@bid"])->name("bid");
+Route::name("feature.")->prefix("featured")->middleware("auth")->group(function(){
+    Route::get("/", ["uses"=>"FeatureController@show"])->name("show");
+    Route::post("/", ["uses"=>"FeatureController@checkout"])->name("setup");
+    Route::get("/{order}/success", ["uses"=>"PaymentController@paypal"])->name("success");
+    Route::get("/{order}/complete", ["uses"=>"FeatureController@complete"])->name("complete");
 });
 
+Route::name("payment.ipn.")->prefix("gateway/ipn/")->group(function(){
+    Route::post("/{order}/paypal", ["uses" => "PaymentController@paypal"])->name("paypal");
+});
 
 Route::get("/legal/terms", function(){
     return view("legal.terms");

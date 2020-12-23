@@ -44,9 +44,9 @@
                         <li class="nav-item">
                             <a href="{{route('home')}}" class="nav-link">Servers</a>
                         </li>
-                        @if(Route::has("auction.current"))
+                        @if(Route::has("feature.show"))
                         <li class="nav-item">
-                            <a href="{{route('auction.current')}}" class="nav-link">Sponsored Server</a>
+                            <a href="{{route('feature.show')}}" class="nav-link">Feature Server</a>
                         </li>
                         @endif
                     </ul>

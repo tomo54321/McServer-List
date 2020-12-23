@@ -38,8 +38,6 @@ class Kernel extends ConsoleKernel
         //Update cloudflare ip list
         $schedule->command('cloudflare:reload')->weekly();
 
-        // Begin Bidding Session
-        $schedule->command('bidding:new')->weeklyOn(7, '9:00');
     }
 
     /**

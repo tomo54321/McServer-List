@@ -18,8 +18,10 @@
         "laravel/framework": "^7.0",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.0",
+        "league/omnipay": "3",
         "monarobase/country-list": "^3.2",
         "monicahq/laravel-cloudflare": "^1.4",
+        "omnipay/paypal": "^3.0",
         "propaganistas/laravel-disposable-email": "^2.0",
         "xpaw/php-minecraft-query": "^4.0"
     },
