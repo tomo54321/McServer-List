@@ -62,7 +62,7 @@ var votesChart = new Chart(voteCTX, {
         labels: chartDates,
         datasets: [{
             label: '# of Votes',
-            data: [@foreach($votes as $vote) {{$vote}}, @endforeach],
+            data: [@foreach($votes as $vote) {{ $vote }}, @endforeach],
             backgroundColor: [
                 'rgba(101, 116, 205, 0.2)',
             ],
@@ -80,7 +80,7 @@ var playersChart = new Chart(playerCTX, {
         labels: chartDates,
         datasets: [{
             label: 'Peak number of players',
-            data: [@foreach($players as $player) {{$player}}, @endforeach],
+            data: [@foreach($players as $player) {{ $player }}, @endforeach],
             backgroundColor: [
                 'rgba(149, 97, 226, 0.2)',
             ],
@@ -98,7 +98,7 @@ var ipChart = new Chart(ipCopiesCTX, {
         labels: chartDates,
         datasets: [{
             label: '# of IP Copies',
-            data: [@foreach($ipcopies as $ipc) {{$ipc}}, @endforeach],
+            data: [@foreach($ipcopies as $ipc) {{ $ipc }}, @endforeach],
             backgroundColor: [
                 'rgba(246, 109, 155, 0.2)',
             ],

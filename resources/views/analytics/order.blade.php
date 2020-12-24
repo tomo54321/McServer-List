@@ -7,7 +7,13 @@
     <div class="row align-items-center">
         <div class="col-6">
             <h1>Analytics for Order #{{$order->id}}</h1>
-            <p class="text-muted">Showing analytics for your order compared to the period before.</p>
+            <p class="text-muted">Showing analytics for your order.</p>
+            <p class="text-muted">
+                Date Comparison: 
+                {{ $dates->first()->format("d/m/Y") }} - {{ $dates->last()->format("d/m/Y") }}
+                vs
+                {{ $order->paid_at->copy()->addDays(-$order->days_for)->format("d/m/Y") }} - {{ $order->feature_until->copy()->addDays(-$order->days_for)->format("d/m/Y") }}
+            </p>
         </div>
         <div class="col-6 text-right">
             <a href="{{route('server.show', ['server'=>$order->server->id])}}" class="btn btn-secondary">Back</a>
@@ -96,10 +102,10 @@ var playersChart = new Chart(playerCTX, {
                 label: 'Peak number of players',
                 data: [@foreach($featured["players"] as $player) {{$player}}, @endforeach],
                 backgroundColor: [
-                    'rgba(149, 97, 226, 0.2)',
+                    'rgba(101, 116, 205, 0.2)',
                 ],
                 borderColor: [
-                    '#9561e2',
+                    '#6574cd',
                 ],
                 borderWidth: 2
             },
@@ -127,10 +133,10 @@ var ipChart = new Chart(ipCopiesCTX, {
                 label: '# of IP Copies',
                 data: [@foreach($featured["ipcopies"] as $ipc) {{$ipc}}, @endforeach],
                 backgroundColor: [
-                    'rgba(246, 109, 155, 0.2)',
+                    'rgba(101, 116, 205, 0.2)',
                 ],
                 borderColor: [
-                    '#f66d9b',
+                    '#6574cd',
                 ],
                 borderWidth: 2
             },
@@ -138,10 +144,10 @@ var ipChart = new Chart(ipCopiesCTX, {
                 label: '# of IP Copies (Previous Period)',
                 data: [@foreach($previous["ipcopies"] as $ipc) {{$ipc}}, @endforeach],
                 backgroundColor: [
-                    'rgba(101, 116, 205, 0.2)',
+                    'rgba(246, 109, 155, 0.2)',
                 ],
                 borderColor: [
-                    '#6574cd',
+                    '#f66d9b',
                 ],
                 borderWidth: 2
             }

@@ -10,6 +10,8 @@ use App\Models\Transaction;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 
 class AnalyticsController extends Controller
 {
@@ -46,7 +48,7 @@ class AnalyticsController extends Controller
 
         return view("analytics.basic")->with([
             "server" => $server,
-            "dates" => $range,
+            "dates" => $range->toArray(),
             "votes" => $analytics["votes"],
             "players" => $analytics["players"],
             "ipcopies" => $analytics["ipcopies"]
@@ -73,8 +75,8 @@ class AnalyticsController extends Controller
         $server = $order->server;
         $feature_range = CarbonPeriod::create($order->paid_at, $order->feature_until);
         
-        $start_previous = $order->paid_at->copy()->addDays($order->days_for);
-        $end_previous = $order->feature_until->copy()->addDays($order->days_for);
+        $start_previous = $order->paid_at->copy()->addDays(-$order->days_for);
+        $end_previous = $order->feature_until->copy()->addDays(-$order->days_for);
         $previous_range = CarbonPeriod::create($start_previous, $end_previous);
 
         $feature_analytics = $this->getAnalyticsFromDateRange($server, $feature_range);
@@ -99,24 +101,58 @@ class AnalyticsController extends Controller
      * @return array
      */
     private function getAnalyticsFromDateRange(\App\Models\Server $server, \Carbon\CarbonPeriod $range){
+        $votes_sql = ServerVote::whereDate("created_at", ">=", $range->first())
+            ->whereDate("created_at", "<=", $range->last())
+            ->where("server_id", $server->id)
+            ->groupBy("created_at")
+            ->orderBy("created_at", "DESC")
+        ->get([
+            DB::raw("DATE(created_at) as date"),
+            DB::raw("COUNT(*) as 'votes'")
+        ])->toArray();
+        $ipcopies_sql = ServerEventLog::whereDate("created_at", ">=", $range->first())
+            ->whereDate("created_at", "<=", $range->last())
+            ->where([
+                "server_id" => $server->id,
+                "event_type" => ServerEventLog::EventType("IPCopy")
+            ])
+            ->groupBy("created_at")
+            ->orderBy("created_at", "DESC")
+        ->get([
+            DB::raw("DATE(created_at) as date"),
+            DB::raw("COUNT(*) as 'copies'")
+        ])->toArray();
+        $player_count_sql = ServerPing::whereDate("created_at", ">=", $range->first())
+                ->whereDate("created_at", "<=", $range->last())
+                ->where("server_id", $server->id)
+                ->orderBy("date", "DESC")
+                ->groupBy("date")
+        ->get([
+            DB::raw("DATE(created_at) as date"),
+            DB::raw("MAX(online_players) as playercount")
+        ])->toArray();
+
         $votes = [];
-        $players = [];
         $ipcopies = [];
+        $player_count = [];
+                    
         foreach($range as $date){
 
-            $votes[] = ServerVote::whereDate("created_at", $date)->where("server_id", $server->id)->count();
-            $pc = ServerPing::whereDate("created_at", $date)->where("server_id", $server->id)->orderBy("online_players", "DESC")->first();
-            $ipcopies[] = ServerEventLog::whereDate("created_at", $date)->where(["server_id" => $server->id, "event_type"=>ServerEventLog::EventType("IPCopy")])->count();
+            $format = $date->format("Y-m-d");
+            $v = array_search($format, array_column($votes_sql, "date"));
+            $ip = array_search($format, array_column($ipcopies_sql, "date"));
+            $pc = array_search($format, array_column($player_count_sql, "date"));
 
-            $players[] = is_null($pc) ? 0 : $pc->online_players;
-
-            unset($pc);
-            unset($date);
-        }
+            if($v !== false){ $votes[] = $votes_sql[$v]["votes"]; } else { $votes[] = 0; }
+            if($ip !== false){ $ipcopies[] = $ipcopies_sql[$ip]["copies"]; } else { $ipcopies[] = 0; }
+            if($pc !== false){ $player_count[] = $player_count_sql[$pc]["playercount"]; } else { $player_count[] = 0; }
+            
+        }      
+        
 
         return [
             "votes" => $votes,
-            "players" => $players,
+            "players" => $player_count,
             "ipcopies" => $ipcopies
         ];
     }

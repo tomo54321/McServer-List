@@ -123,6 +123,27 @@
 
 @section("inline-script")
 <script>
+
+    var checkImgVis = function(){
+        $("img[data-hasimg='1']").each(function(){
+            if($(this).isInViewport()){
+                var img = $(this).clone();
+                var static_img = $(this);
+                img.removeAttr("data-hasimg");
+                var img_load = function(){
+                    static_img.after(img);
+                    static_img.remove();
+                    img.off("load", img_load);
+                };
+
+                img.on("load", img_load);
+
+                var src = $(this).attr("src");
+                img.attr("src", src.replace(".jpg", ".gif"));
+            }
+        });
+    };
+
     $(document).ready(function(){
         $(".ip-copy-btn").click(function(){
             var ip = $(this).data("ip");
@@ -142,6 +163,8 @@
             }, 2500);
 
         });
+        checkImgVis();
     });
+    $(window).on("scroll", checkImgVis);
 </script>
 @endsection
