@@ -1,9 +1,11 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
+use App\Mail\PaymentSuccess;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Mail;
 
 class Transaction extends Model
 {
@@ -75,6 +77,9 @@ class Transaction extends Model
         $srv = $this->server;
         $srv->featured_until = Carbon::now()->addDays($this->days_for);
         $srv->save();
+
+        // Send payment success email
+        Mail::send(new PaymentSuccess($this));
 
         return $this;
     }

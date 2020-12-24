@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -31,9 +31,9 @@ class ServerVote extends Model
     /**
      * Server voted for
      *
-     * @return \App\Server
+     * @return \App\Models\Server
      */
     public function server(){
-        return $this->belongsTo("App\Server");
+        return $this->belongsTo(Server::class);
     }
 }

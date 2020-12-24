@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Server;
-use App\ServerEventLog;
-use App\ServerPing;
-use App\ServerVote;
+use App\Models\Server;
+use App\Models\ServerEventLog;
+use App\Models\ServerPing;
+use App\Models\ServerVote;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -30,7 +30,7 @@ class AnalyticsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function basic($server_id, Request $request){
-        $server = \App\Server::where([
+        $server = \App\Models\Server::where([
             "id" => $server_id,
             "user_id" => $request->user()->id
         ])->first();

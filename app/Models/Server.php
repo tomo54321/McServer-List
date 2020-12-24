@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -105,7 +105,7 @@ class Server extends Model
      */
     public function owner()
     {
-        return $this->belongsTo("App\User", "user_id");
+        return $this->belongsTo(User::class, "user_id");
     }
 
     /**
@@ -115,7 +115,7 @@ class Server extends Model
      */
     public function cache_pings()
     {
-        return $this->hasMany("App\ServerPing");
+        return $this->hasMany(ServerPing::class);
     }
 
     /**
@@ -134,7 +134,7 @@ class Server extends Model
      */
     public function votes()
     {
-        return $this->hasMany("App\ServerVote");
+        return $this->hasMany(ServerVote::class);
     }
 
     /**

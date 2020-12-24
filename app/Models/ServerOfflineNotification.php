@@ -1,10 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ServerPing extends Model
+class ServerOfflineNotification extends Model
 {
     /**
      * Attributes that are mass assignable
@@ -13,16 +13,14 @@ class ServerPing extends Model
      */
     protected $fillable = [
         'server_id',
-        'online_players'
     ];
 
     /**
      * Server
      * 
-     * @return App\Server
+     * @return App\Models\Server
      */
     public function server(){
-        return $this->belongsTo("App\Server");
+        return $this->belongsTo(Server::class);
     }
-    
 }

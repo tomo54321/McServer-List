@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -38,7 +38,7 @@ class ServerEventLog extends Model
     /**
      * Server
      * 
-     * @return \App\Server
+     * @return \App\Models\Server
      */
     public function server(){
         return $this->belongsTo(Server::class);

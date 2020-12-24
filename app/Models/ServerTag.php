@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -26,19 +26,19 @@ class ServerTag extends Model
     /**
      * Server
      * 
-     * @return App\Server
+     * @return App\Models\Server
      */
     public function server(){
-        return $this->belongsTo("App\Server");
+        return $this->belongsTo(Server::class);
     }
     
     /**
      * Actual Tag
      * 
-     * @return App\Tag
+     * @return App\Models\Tag
      */
     public function tag(){
-        return $this->belongsTo("App\Tag");
+        return $this->belongsTo(Tag::class);
     }
 
     /**

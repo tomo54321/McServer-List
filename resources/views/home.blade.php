@@ -21,7 +21,7 @@
     <h1>Featured Servers</h1>
     <div id="servers-list">
 
-        @foreach($servers as $srv)
+        @foreach($promoted as $srv)
 
         @include("includes.server-row", ['srv' => $srv])
 

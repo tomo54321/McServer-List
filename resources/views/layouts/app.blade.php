@@ -75,6 +75,7 @@
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                     <a href="{{route('account.servers')}}" class="dropdown-item">My Servers</a>
+                                    <a href="{{route('account.orders')}}" class="dropdown-item">Payments</a>
                                     <a class="dropdown-item" href="{{route('account.settings')}}">Account Settings</a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();

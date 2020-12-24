@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Server;
-use App\ServerVote;
+use App\Models\Server;
+use App\Models\ServerVote;
 use Carbon\Carbon;
 
 use D3strukt0r\VotifierClient\ServerType\NuVotifier;

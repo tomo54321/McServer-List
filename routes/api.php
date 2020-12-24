@@ -20,6 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(["namespace"=>"API"], function(){
     Route::group(["prefix"=>"/server"], function(){
+        Route::get("/proxy/random", ["uses"=>"ProxyController@random"]);
         Route::get("/ping", ["uses"=>"ServerController@ping"]);
         Route::get("/{server}/copy", ["uses"=>"ServerController@ipCopyEvent"]);
     });

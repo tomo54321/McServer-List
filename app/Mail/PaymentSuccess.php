@@ -7,25 +7,25 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class NewUnpaidInvoice extends Mailable
+class PaymentSuccess extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Invoice
-     * @var \App\BidInvoice $invoice
+     * @var \App\Models\Transaction $invoice
      */
-    private $invoice;
+    private $tx;
 
     /**
      * Create a new message instance.
      *
-     * @param \App\BidInvoice $invoice
+     * @param \App\Models\Transaction $invoice
      * @return void
      */
-    public function __construct(\App\BidInvoice $invoice)
+    public function __construct(\App\Models\Transaction $tx)
     {
-        $this->invoice = $invoice;
+        $this->tx = $tx;
     }
 
     /**
@@ -35,11 +35,11 @@ class NewUnpaidInvoice extends Mailable
      */
     public function build()
     {
-        return $this->subject("New Auction Invoice")
-        ->to($this->invoice->bid->user->email)
-        ->markdown('emails.invoices.unpaid')
+        return $this->subject("Payment Success")
+        ->to($this->tx->server->owner->email)
+        ->markdown('emails.payment.success')
         ->with([
-            "invoice" => $this->invoice
+            "tx" => $this->tx
         ]);
     }
 }

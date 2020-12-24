@@ -23,6 +23,7 @@ Route::get("/analytics/{server}", "AnalyticsController@basic")->name("analytics.
 
 Route::name("account.")->prefix("account")->group(function(){
     Route::get("servers", "AccountController@servers")->name("servers");
+    Route::get("orders", "AccountController@orders")->name("orders");
     Route::get("settings", "AccountController@settings")->name("settings");
     Route::put("settings/details", "AccountController@details")->name("settings.details");
     Route::put("settings/password", "AccountController@password")->name("settings.password");
@@ -34,10 +35,6 @@ Route::name("feature.")->prefix("featured")->middleware("auth")->group(function(
     Route::post("/", ["uses"=>"FeatureController@checkout"])->name("setup");
     Route::get("/{order}/success", ["uses"=>"PaymentController@paypal"])->name("success");
     Route::get("/{order}/complete", ["uses"=>"FeatureController@complete"])->name("complete");
-});
-
-Route::name("payment.ipn.")->prefix("gateway/ipn/")->group(function(){
-    Route::post("/{order}/paypal", ["uses" => "PaymentController@paypal"])->name("paypal");
 });
 
 Route::get("/legal/terms", function(){

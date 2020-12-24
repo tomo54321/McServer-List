@@ -30,7 +30,7 @@ class Kernel extends ConsoleKernel
         $schedule->command("servers:ping")->hourly();
         
         //Update server featured
-        // $schedule->command("servers:featured")->hourly();
+        $schedule->command("servers:featured")->hourly();
 
         //Update disposable email address list
         $schedule->command('disposable:update')->weekly();

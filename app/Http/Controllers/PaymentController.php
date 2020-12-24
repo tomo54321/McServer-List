@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Transaction;
+use App\Models\Transaction;
 use Exception;
 use Omnipay\Omnipay;
 
 class PaymentController extends Controller
 {
     
-/**
+    /**
      * Page to show on success
      * 
      * @param int $transaction
@@ -31,7 +31,6 @@ class PaymentController extends Controller
                     "currency" => "USD",
                     "returnUrl" => route("feature.success", ["order" => $transaction->id]),
                     "cancelUrl" => route("feature.show", ["payerror" => "1"]),
-                    "notifyUrl" => route("payment.ipn.paypal", ["order" => $transaction->id]),
                 ])->send();
 
             if($response->isSuccessful()){

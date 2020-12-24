@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\AccountEmailChanged;
 use App\Mail\AccountPasswordChanged;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -31,6 +32,23 @@ class AccountController extends Controller
     public function servers(Request $request){
         return view("account.servers")->with([
             "servers" => $request->user()->servers
+        ]);
+    }
+
+    /**
+     * Show user their servers
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function orders(Request $request){
+        $orders = Transaction::whereHas("server", function($q){
+            $q->where("user_id", auth()->user()->id);
+        })
+        ->orderBy("created_at", "DESC")
+        ->paginate(20);
+        return view("account.orders")->with([
+            "orders" => $orders
         ]);
     }
 

@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Rules\ServerIP;
 use App\Rules\ValidCountry;
-use App\Server;
-use App\ServerPing;
-use App\ServerTag;
-use App\ServerVote;
-use App\Tag;
+use App\Models\Server;
+use App\Models\ServerPing;
+use App\Models\ServerTag;
+use App\Models\Tag;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

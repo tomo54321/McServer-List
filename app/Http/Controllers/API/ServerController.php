@@ -4,8 +4,8 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Rules\ServerIP;
-use App\Server;
-use App\ServerEventLog;
+use App\Models\Server;
+use App\Models\ServerEventLog;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 

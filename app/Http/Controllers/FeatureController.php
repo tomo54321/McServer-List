@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Server;
-use App\Transaction;
+use App\Models\Server;
+use App\Models\Transaction;
 use Carbon\Carbon;
 use Exception;
 use Omnipay\Omnipay;
@@ -65,7 +65,6 @@ class FeatureController extends Controller
                     "currency" => "USD",
                     "returnUrl" => route("feature.success", ["order" => $tx->id]),
                     "cancelUrl" => route("feature.show", ["payerror" => "1"]),
-                    "notifyUrl" => route("payment.ipn.paypal", ["order" => $tx->id]),
                 ])->send();
 
             if($response->isRedirect()){
