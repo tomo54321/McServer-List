@@ -60,8 +60,6 @@
                     <li>Always at the top of our server list</li>
                     <li>See an increase in your player count</li>
                     <li>Always included within our random server</li>
-                    <li>Included within our featured random server</li>
-                    <li>2x more likely to be picked for server of the day</li>
                 </ul>
             </div>
         </div>

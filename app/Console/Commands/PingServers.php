@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Server;
+use App\Models\Server;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
@@ -39,7 +39,7 @@ class PingServers extends Command
      */
     public function handle()
     {
-        $servers = Server::where("last_pinged", "<", Carbon::now()->subHours(1))->get();
+        $servers = Server::where("last_pinged", "<", Carbon::now()->subHours(12))->get();
         foreach($servers as $srv){
             if(!$srv->is_online){
 

@@ -20,6 +20,7 @@ Route::get("/server/{server}/vote", "VoteController@vote")->name("server.vote");
 Route::post("/server/{server}/vote", "VoteController@cast")->name("server.cast");
 
 Route::get("/analytics/{server}", "AnalyticsController@basic")->name("analytics.basic");
+Route::get("/analytics/order/{order}", "AnalyticsController@order")->name("analytics.order");
 
 Route::name("account.")->prefix("account")->group(function(){
     Route::get("servers", "AccountController@servers")->name("servers");

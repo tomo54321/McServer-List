@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Carbon\Carbon;
-use App\Server;
+use App\Models\Server;
 use Illuminate\Console\Command;
 
 class ClearFeaturedServers extends Command

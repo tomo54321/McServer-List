@@ -63,6 +63,27 @@ class Transaction extends Model
     }
 
     /**
+     * Get if the tx is paid for?
+     * 
+     * @return boolean
+     */
+    public function getPaidAttribute(){
+        return !is_null($this->paid_at);   
+    }
+
+    /**
+     * Get the expiry
+     * 
+     * @return \Carbon\Carbon
+     */
+    public function getFeatureUntilAttribute(){
+        if(is_null($this->paid_at)){
+            return null;
+        }
+        return $this->paid_at->copy()->addDays($this->days_for); 
+    }
+
+    /**
      * Mark this order as paid
      * 
      * @param string $vendorTx

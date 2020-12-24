@@ -16,7 +16,7 @@
 
                 <div class="server-ip-container">
                     <a href="{{route('server.show', ['server'=>$srv->id])}}">
-                        <img src="{{$srv->has_banner ? asset("storage/".$srv->user_id."/".$srv->banner_path) : "https://placehold.it/468x60"}}"
+                        <img src="{{$srv->has_banner ? asset("storage/".$srv->user_id."/".$srv->banner_jpg_path) : "https://placehold.it/468x60"}}"
                             class="d-none d-md-block" alt="{{$srv->name}}" width="100%" height="auto" />
                     </a>
                     <div class="server-ip d-flex align-items-center ip-copy-btn" data-ip="{{$srv->full_ip}}"

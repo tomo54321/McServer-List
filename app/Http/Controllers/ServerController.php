@@ -146,8 +146,14 @@ class ServerController extends Controller
         $banner_filename = null;
         $header_filename = null;
         if (!is_null($request->file("banner"))) {
-            $banner_filename = md5(time() . $request->file("banner")->getClientOriginalExtension()) . "." . $request->file("banner")->getClientOriginalExtension();
+            $bfname = md5(time() . $request->file("banner")->getClientOriginalExtension());
+            $banner_filename =  $bfname . "." . $request->file("banner")->getClientOriginalExtension();
+            // Save the gif
             $banner_path = $request->file("banner")->storeAs($folder_path, $banner_filename);
+            
+            // Save the jpg
+            $jpg_path = storage_path("app/" . $folder_path) . "/" . $bfname . ".jpg";
+            Image::make($request->file("banner"))->encode("jpg", 60)->save($jpg_path);
         }
         if (!is_null($request->file("header"))) {
             $header_filename = md5(time() . $request->file("header")->getClientOriginalName()) . ".jpg";
@@ -312,13 +318,23 @@ class ServerController extends Controller
 
             if ($server->has_banner) {
                 unlink(storage_path("app/" . $folder_path) . "/" . $server->banner_path);
+                unlink(storage_path("app/" . $folder_path) . "/" . $server->banner_jpg_path);
             }
-
-            $banner_filename = md5(time() . $request->file("banner")->getClientOriginalExtension()) . "." . $request->file("banner")->getClientOriginalExtension();
+            
+            $bfname = md5(time() . $request->file("banner")->getClientOriginalExtension());
+            $banner_filename =  $bfname . "." . $request->file("banner")->getClientOriginalExtension();
+            // Save the gif
             $banner_path = $request->file("banner")->storeAs($folder_path, $banner_filename);
+            
+            // Save the jpg
+            $jpg_path = storage_path("app/" . $folder_path) . "/" . $bfname . ".jpg";
+            Image::make($request->file("banner"))->encode("jpg", 60)->save($jpg_path);
+
+
         }
         if(!is_null($request->input("remove_banner")) && $server->has_banner && is_null($request->file("banner")) ){
             unlink(storage_path("app/" . $folder_path) . "/" . $server->banner_path);
+            unlink(storage_path("app/" . $folder_path) . "/" . $server->banner_jpg_path);
             $banner_filename = null;
         }
 

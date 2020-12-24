@@ -17,6 +17,7 @@
                         <th>Days</th>
                         <th>Featured From</th>
                         <th>Featured Until</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -28,6 +29,11 @@
                         <td>{{$order->days_for}} Days</td>
                         <td>{{ $order->paid_at->format("jS M Y \\a\\t h:i:s a") }}</td>
                         <td>{{ $order->paid_at->addDays($order->days_for)->format("jS M Y \\a\\t h:i:s a") }}</td>
+                        <td>
+                            @if($order->paid)
+                                <a href="{{ route('analytics.order', ['order' => $order->id]) }}" class="btn btn-primary btn-sm">View Performance</a>
+                            @endif
+                        </td>
                     </tr>
                 @empty
                 <tr>

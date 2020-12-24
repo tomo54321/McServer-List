@@ -73,6 +73,7 @@ class Server extends Model
             if (is_dir(storage_path("app/" . $folder_path))) {
                 if ($server->has_banner) {
                     unlink(storage_path("app/" . $folder_path) . "/" . $server->banner_path);
+                    unlink(storage_path("app/" . $folder_path) . "/" . $server->banner_jpg_path);
                 }
                 if ($server->has_header) {
                     unlink(storage_path("app/" . $folder_path) . "/" . $server->header_path);
@@ -155,6 +156,19 @@ class Server extends Model
     public function getHasHeaderAttribute()
     {
         return !is_null($this->header_path);
+    }
+
+    /**
+     * Get the banner jpg path
+     * 
+     * @return string
+     */
+    public function getBannerJpgPathAttribute(){
+        if(!$this->has_banner){
+            return null;
+        }
+
+        return str_replace(".gif", ".jpg", $this->banner_path);
     }
 
     /**
