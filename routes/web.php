@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', "ServerController@index")->name("home");
+Route::view("random-server", "random-server")->name("random-server");
 Route::resource("server", "ServerController")->except(["index"]);
 
 Route::get("/server/{server}/vote", "VoteController@vote")->name("server.vote");

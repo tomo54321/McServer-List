@@ -49,6 +49,11 @@
                             <a href="{{route('feature.show')}}" class="nav-link">Feature Server</a>
                         </li>
                         @endif
+                        @if(Route::has("random-server"))
+                        <li class="nav-item">
+                            <a href="{{route('random-server')}}" class="nav-link">Random Server</a>
+                        </li>
+                        @endif
                     </ul>
 
                     <!-- Right Side Of Navbar -->

@@ -81,4 +81,14 @@ class ServerController extends Controller
 
         return response()->json(["success"=>true]);
     }
+
+    /**
+     * Get a server
+     * 
+     * @param \App\Models\Server $server
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show(\App\Models\Server $server){
+        return $server->toArray();
+    }
 }

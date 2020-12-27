@@ -48,6 +48,27 @@ class Server extends Model
     ];
 
     /**
+     * Variables hidden from json arrays
+     * 
+     * @var array
+     */
+    protected $hidden = [
+        "votifier_key",
+        "votifier_ip",
+        "votifier_port",
+        "featured_until",
+        "standing_out_until",
+        "version_string",
+        "online_players",
+        "max_players",
+        "offline_since",
+        "last_pinged",
+        "created_at",
+        "updated_at",
+        "user_id",
+    ];
+
+    /**
      * Cast attributes to native objects
      * 
      * @var array
