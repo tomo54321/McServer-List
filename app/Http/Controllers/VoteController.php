@@ -21,12 +21,7 @@ class VoteController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function vote($id){
-        //Only find the server if it's online!
-        $server = Server::where([
-            "id"=>$id,
-            "is_online"=>true
-        ])->first();
-        if(is_null($server)){ abort(404); }
+        $server = Server::findOrFail($id);
 
         return view("servers.vote")->with([
             "server" => $server,
@@ -41,12 +36,7 @@ class VoteController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function cast(Request $request, $id){
-        //Only find the server if it's online!
-        $server = Server::where([
-            "id"=>$id,
-            "is_online"=>true
-        ])->first();
-        if(is_null($server)){ abort(404); }
+        $server = Server::findOrFail($id);
 
         $request->validate([
             "username" => ["required", "string", "min:4"],
