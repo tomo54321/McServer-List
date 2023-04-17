@@ -1,6 +1,6 @@
 <?php
 
-use App\Tag;
+use App\Models\Tag;
 use Illuminate\Database\Seeder;
 
 class ServerTagSeeder extends Seeder
