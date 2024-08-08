@@ -93,14 +93,26 @@ class Server extends Model
             //Path exists already?
             if (is_dir(storage_path("app/" . $folder_path))) {
                 if ($server->has_banner) {
-                    unlink(storage_path("app/" . $folder_path) . "/" . $server->banner_path);
-                    unlink(storage_path("app/" . $folder_path) . "/" . $server->banner_jpg_path);
+                    $banner_full_path = storage_path("app/" . $folder_path) . "/" . $server->banner_path;
+                    $banner_jpg_full_path = storage_path("app/" . $folder_path) . "/" . $server->banner_jpg_path;
+                    if(file_exists($banner_full_path)) {
+                        unlink($banner_full_path);
+                    }
+                    if(file_exists($banner_jpg_full_path)) {
+                        unlink($banner_jpg_full_path);
+                    }
                 }
                 if ($server->has_header) {
-                    unlink(storage_path("app/" . $folder_path) . "/" . $server->header_path);
+                    $header_full_path = storage_path("app/" . $folder_path) . "/" . $server->header_path;
+                    if(file_exists($header_full_path)) {
+                        unlink($header_full_path);
+                    }
                 }
                 if ($server->has_icon) {
-                    unlink(storage_path("app/" . $folder_path) . "/" . $server->icon_path);
+                    $icon_full_path = storage_path("app/" . $folder_path) . "/" . $server->icon_path;
+                    if(file_exists($icon_full_path)) {
+                        unlink($icon_full_path);
+                    }
                 }
             }
 

@@ -317,8 +317,14 @@ class ServerController extends Controller
         if (!is_null($request->file("banner"))) {
 
             if ($server->has_banner) {
-                unlink(storage_path("app/" . $folder_path) . "/" . $server->banner_path);
-                unlink(storage_path("app/" . $folder_path) . "/" . $server->banner_jpg_path);
+                $banner_full_path = storage_path("app/" . $folder_path) . "/" . $server->banner_path;
+                $banner_jpg_full_path = storage_path("app/" . $folder_path) . "/" . $server->banner_jpg_path;
+                if(file_exists($banner_full_path)) {
+                    unlink($banner_full_path);
+                }
+                if(file_exists($banner_jpg_full_path)) {
+                    unlink($banner_jpg_full_path);
+                }
             }
             
             $bfname = md5(time() . $request->file("banner")->getClientOriginalExtension());
